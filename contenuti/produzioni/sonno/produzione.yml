@@ -1,0 +1,47 @@
+# ─────────────────────────────────────────────────────────────
+#  SONNO — scheda del format
+#  Nella stessa cartella:  hero.jpg  ·  logo.png  ·  copertine/ (facoltativa)
+# ─────────────────────────────────────────────────────────────
+
+nome: SONNO
+categoria: Salute e benessere          # piccola etichetta verde sopra il titolo
+ordine: 1                              # posizione del carosello in home (1 = primo)
+attivo: true                           # false = format nascosto ovunque
+original: true               # etichetta "G22 Original" sulle card
+
+descrizione: >
+  Ciò che sei di giorno comincia la notte. La serie di Giardino22 Play dedicata
+  al sonno e al benessere: con il Dott. Camillo Foresti e Donatello Iacullo
+  affrontiamo i temi della medicina del sonno con un linguaggio semplice,
+  autorevole e accessibile.
+
+# Una o più playlist YouTube, anche di canali diversi.
+# Va bene sia il link completo sia il solo ID.
+playlist:
+  - https://www.youtube.com/playlist?list=PLEithlnxrIT4   # episodi
+  - https://www.youtube.com/playlist?list=PLbn5HN5J27HM   # short
+
+# Vetrina automatica (le scelte di contenuti/vetrina.yml hanno la precedenza)
+#   hero:            no | ultimo
+#   da_non_perdere:  no | ultimo | ultimi-2 | ultimi-3 ...
+in_evidenza:
+  hero: ultimo
+  da_non_perdere: ultimi-2
+
+# Compila solo quelli che esistono: le icone vuote non compaiono sul sito.
+social:
+  youtube: https://www.youtube.com/playlist?list=PLEithlnxrIT4
+  spotify: https://open.spotify.com/show/033ONghYr8Wv5Vp0aHW4aY
+  amazon_music: https://music.amazon.it/podcasts/c982c0cc-f469-49bb-8d5c-bbc42b6e2936/sonno
+  apple_podcasts:
+  instagram:
+  tiktok:
+  linkedin:
+  facebook:
+  sito:
+
+# Facoltativo: link per singolo episodio (es. la puntata su Spotify).
+# La chiave è l'ID o il link del video YouTube.
+# link_episodi:
+#   uUvRxN1bOKE:
+#     spotify: https://open.spotify.com/episode/...

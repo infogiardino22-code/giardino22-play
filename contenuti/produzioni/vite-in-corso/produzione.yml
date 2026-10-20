@@ -1,0 +1,38 @@
+nome: Vite in Corso
+categoria: Storie vere
+ordine: 2
+attivo: true
+original: true               # etichetta "G22 Original" sulle card
+
+descrizione: >
+  Storie di errori, cambiamento e seconde possibilità, raccontate senza filtri
+  da chi le ha vissute: gang giovanili, carcere minorile, comunità educative
+  e la strada per ricominciare.
+
+playlist:
+  - PLCTbdoQpEPIQ          # short
+  # Aggiungere qui la playlist con gli episodi lunghi (Ep. 01–07)
+
+in_evidenza:
+  hero: no
+  da_non_perdere: ultimo
+
+social:
+  youtube: https://www.youtube.com/playlist?list=PLCTbdoQpEPIQ
+  instagram: https://www.instagram.com/giardino22artlab/
+  spotify:
+  amazon_music:
+  apple_podcasts:
+  tiktok:
+  linkedin:
+  facebook:
+  sito:
+
+link_episodi:
+  JByt8o8XYFk: { spotify: https://open.spotify.com/episode/62qaEX3by04R7nSIRqEN15 }
+  kwBo6GwBvC4: { spotify: https://open.spotify.com/episode/21CzyU9zQtYhL30WXGrCpf }
+  tvhS8JXRPIU: { spotify: https://open.spotify.com/episode/7rCD67meXJ6G3PLMFlpReR }
+  fIqb8qJKvuk: { spotify: https://open.spotify.com/episode/1GJFRW6ZTHNe7NtgTLo0hC }
+  5taRljgqy_E: { spotify: https://open.spotify.com/episode/0hfICUm9iPG9gcILBxouvg }
+  Ejv-vjTzz0U: { spotify: https://open.spotify.com/episode/3bekXu1WtAmunWDLrxwpMy }
+  Whz8k3O_gIw: { spotify: https://open.spotify.com/episode/5mM45tHRzDeWGvxkudTNVW }

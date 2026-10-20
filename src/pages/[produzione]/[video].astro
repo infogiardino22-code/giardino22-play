@@ -1,0 +1,86 @@
+---
+import Base from '../../layouts/Base.astro';
+import Riga from '../../components/Riga.astro';
+import Icona from '../../components/Icona.astro';
+import { video, perSlug, episodiDi, videoDi, linkVideo, linkFormat, media, url, infoVideo, eNuovo, primaRiga, paragrafi, ETICHETTE } from '../../lib/catalogo.js';
+
+export function getStaticPaths() {
+  return video.map(v => ({ params: { produzione: v.produzione, video: v.id }, props: { v } }));
+}
+const { v } = Astro.props;
+const p = perSlug.get(v.produzione);
+
+// Link alle altre piattaforme: quelli del singolo episodio, poi quelli del format (podcast)
+const link = { ...v.link };
+for (const k of ['spotify', 'amazon_music', 'apple_podcasts']) if (!link[k] && p.social[k]) link[k] = p.social[k];
+
+const episodi = episodiDi(p.slug);
+const pos = episodi.findIndex(e => e.id === v.id);
+const prossimo = !v.short && pos >= 0 ? episodi[pos + 1] : null;
+// Episodi (sempre orizzontali) e clip della stessa serie, in due righe separate
+const altriEpisodi = episodi.filter(x => x.id !== v.id);
+const clipSerie = videoDi(p.slug).filter(x => x.short && x.id !== v.id);
+// "Guarda anche": un mix degli ultimi episodi lunghi degli altri format
+const anche = video.filter(x => x.produzione !== v.produzione && !x.short).slice(0, 10);
+
+const indirizzo = new URL(linkVideo(v), Astro.site).href;
+const jsonld = {
+  '@context': 'https://schema.org', '@type': 'VideoObject',
+  name: v.titoloOriginale, description: primaRiga(v.descrizione, 300) || v.titolo,
+  thumbnailUrl: [new URL(media(v.img.og), Astro.site).href],
+  uploadDate: v.pubblicato, duration: `PT${v.secondi}S`,
+  embedUrl: `https://www.youtube-nocookie.com/embed/${v.id}`,
+  url: indirizzo,
+  partOfSeries: { '@type': 'CreativeWorkSeries', name: p.nome, url: new URL(linkFormat(p.slug), Astro.site).href },
+  publisher: { '@type': 'Organization', name: 'Giardino22', url: 'https://www.giardino22.it' },
+};
+const info = infoVideo(v, { data: true });
+---
+<Base titolo={`${v.titolo} · ${p.nome}`} descrizione={primaRiga(v.descrizione, 160) || v.titolo} immagine={media(v.img.og)} tipo="video.episode" jsonld={jsonld}>
+  <div class="vpage wrap">
+    <a class="back" href={url('')}><Icona nome="sx" /> Torna a Play</a>
+    <div class={`watch${v.short ? ' watch--short' : ''}`}>
+      <div class="player" data-yt={v.id} data-titolo={v.titolo}>
+        <img src={media(v.short ? v.img.v : v.img.h)} alt="" width={v.short ? 540 : 960} height={v.short ? 960 : 540} fetchpriority="high" />
+        <button class="go" type="button" aria-label={`Riproduci ${v.titolo}`}><Icona nome="play" /></button>
+        <p class="consent">Premendo play il video viene caricato da YouTube.</p>
+      </div>
+      <div class="info">
+        <a class="eyebrow" href={linkFormat(p.slug)}>{p.nome} · {p.categoria}</a>
+        <h1>{v.titolo}</h1>
+        <div class="meta">
+          {eNuovo(v) && <span class="new">Nuovo</span>}
+          {info.map((x, j) => <>{(j > 0 || eNuovo(v)) && <i></i>}<span>{x}</span></>)}
+        </div>
+        <div class="grid2">
+          <div class="desc">
+            {paragrafi(v.descrizione).map(par => (
+              <p>{par.map(pz => pz.link ? <a href={pz.link} rel="noopener nofollow ugc" target="_blank">{pz.link.replace(/^https:\/\/(www\.)?/, '').slice(0, 48)}</a> : pz.testo)}</p>
+            ))}
+          </div>
+          <aside class="side">
+            <h2 class="h4">Guarda e ascolta anche su</h2>
+            <div class="pills">
+              {Object.entries(link).map(([k, u]) => <a class="pill" href={u} target="_blank" rel="noopener" title={ETICHETTE[k] ?? k} aria-label={ETICHETTE[k] ?? k}><Icona nome={k} /></a>)}
+              <button class="pill" type="button" data-copia={indirizzo} title="Copia link" aria-label="Copia link"><Icona nome="link" /></button>
+            </div>
+            {prossimo && (
+              <>
+                <h2 class="h4">Prossimo episodio</h2>
+                <a class="next" href={linkVideo(prossimo)}>
+                  <img src={media(prossimo.img.h)} alt="" width="160" height="90" loading="lazy" />
+                  <div><span class="eyebrow">{infoVideo(prossimo).slice(1).join(' · ')}</span><b>{prossimo.titolo}</b></div>
+                </a>
+              </>
+            )}
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="stack">
+    <Riga id="altri" sopratitolo="Stessa serie" titolo={`Episodi di ${p.nome}`} video={altriEpisodi} forma="h" tutti={linkFormat(p.slug)} mostraFormat={false} />
+    <Riga id="clip" sopratitolo="Contenuti brevi" titolo="Clip e Short" video={clipSerie} forma="v" mostraFormat={false} />
+    <Riga id="anche" sopratitolo="Dagli altri format" titolo="Guarda anche" video={anche} forma="h" />
+  </div>
+</Base>

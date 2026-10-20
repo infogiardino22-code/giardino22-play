@@ -1,0 +1,131 @@
+---
+import { existsSync } from 'node:fs';
+import Icona from '../components/Icona.astro';
+import { url, BASE } from '../lib/catalogo.js';
+
+const {
+  titolo = 'Giardino22 Play',
+  descrizione = 'Podcast, serie, interviste e format originali di Giardino22.',
+  immagine = null,            // percorso assoluto dell'anteprima social
+  tipo = 'website',
+  jsonld = null,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const og = immagine ? new URL(immagine, Astro.site).href : null;
+const titoloPagina = titolo === 'Giardino22 Play' ? titolo : `${titolo} · Giardino22 Play`;
+
+// I loghi vanno messi in public/brand/ (vedi README). Se mancano, uso il marchio testuale.
+const logoPlay = existsSync('public/brand/giardino22-play.png') ? url('brand/giardino22-play.png') : null;
+const logoG22 = existsSync('public/brand/giardino22.png') ? url('brand/giardino22.png') : null;
+const fontWoff2 = existsSync('public/fonts/ProximaNova-Black.woff2');
+const fontOtf = existsSync('public/fonts/ProximaNova-Black.otf');
+const SITO = 'https://www.giardino22.it';
+// Profili di Giardino22 Play (banner "Segui")
+const PLAY_SOCIAL = {
+  youtube: 'https://www.youtube.com/@giardino22play',
+  instagram: 'https://www.instagram.com/giardino22play/',
+  tiktok: 'https://www.tiktok.com/@giardino22play',
+};
+// Indirizzo dell'informativa privacy: da compilare (variabile PRIVACY_URL o qui)
+const PRIVACY = import.meta.env.PRIVACY_URL || process.env.PRIVACY_URL || '';
+---
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <!-- Regole di sicurezza: il browser carica solo risorse del sito e il player YouTube nocookie.
+       (GitHub Pages non permette header personalizzati, quindi la policy sta qui.) -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; frame-src https://www.youtube-nocookie.com; base-uri 'none'; form-action 'none'; object-src 'none'; upgrade-insecure-requests" />
+  <title>{titoloPagina}</title>
+  <meta name="description" content={descrizione} />
+  <link rel="canonical" href={canonical} />
+  <meta name="theme-color" content="#0B0B0B" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta property="og:site_name" content="Giardino22 Play" />
+  <meta property="og:locale" content="it_IT" />
+  <meta property="og:type" content={tipo} />
+  <meta property="og:title" content={titolo} />
+  <meta property="og:description" content={descrizione} />
+  <meta property="og:url" content={canonical} />
+  {og && <meta property="og:image" content={og} />}
+  {og && <meta property="og:image:width" content="1200" />}
+  {og && <meta property="og:image:height" content="675" />}
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
+  {fontWoff2 && <link rel="preload" href={url('fonts/ProximaNova-Black.woff2')} as="font" type="font/woff2" crossorigin />}
+  {!fontWoff2 && fontOtf && <link rel="preload" href={url('fonts/ProximaNova-Black.otf')} as="font" type="font/otf" crossorigin />}
+  <link rel="stylesheet" href={url('css/play.css')} />
+  {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld).replace(/</g, '\\u003c')} />}
+  <script is:inline src={url('js/anim.js')}></script>
+  <script is:inline src={url('js/play.js')} defer></script>
+</head>
+<body>
+  <a class="skip" href="#contenuto">Vai al contenuto</a>
+  <header class="top" id="top">
+    <div class="top__in wrap">
+      <a class="top__logo" href={BASE} aria-label="Giardino22 Play, home">
+        {logoPlay ? <img src={logoPlay} alt="Giardino22 Play" width="75" height="40" /> : <span class="wordmark">Giardino22<b>Play</b></span>}
+      </a>
+      <nav class="nav" id="nav" aria-label="Principale">
+        <a href={`${SITO}/servizi/`}>Servizi</a>
+        <a href={`${SITO}/noleggio-spazi/`}>Noleggio Spazi</a>
+        <a href={BASE} aria-current="page">Play</a>
+        <a href={`${SITO}/contatti/`}>Contatti</a>
+      </nav>
+      <button class="burger" id="burger" type="button" aria-label="Apri il menu" aria-expanded="false" aria-controls="nav"><Icona nome="menu" /></button>
+    </div>
+  </header>
+
+  <div id="contenuto"><slot /></div>
+
+  <section class="cta">
+    <span class="cta__ring" aria-hidden="true"></span>
+    <div class="wrap">
+    <div>
+      <div class="eyebrow">Giardino22 Play</div>
+      <h2>Nuove storie sono già in produzione.</h2>
+      <p>Podcast, serie, interviste e format originali. Segui Giardino22 Play e scopri le prossime uscite.</p>
+    </div>
+    <div class="cta__follow">
+      <a class="btn" href={PLAY_SOCIAL.youtube} rel="noopener" target="_blank"><Icona nome="youtube" /> Segui Giardino22 Play</a>
+      <span class="cta__icons"><a class="cta__soc" href={PLAY_SOCIAL.instagram} rel="noopener" target="_blank" aria-label="Giardino22 Play su Instagram" title="Instagram"><Icona nome="instagram" /></a>
+      <a class="cta__soc" href={PLAY_SOCIAL.tiktok} rel="noopener" target="_blank" aria-label="Giardino22 Play su TikTok" title="TikTok"><Icona nome="tiktok" /></a></span>
+    </div>
+    </div>
+  </section>
+
+  <footer>
+   <div class="wrap">
+    <div>
+      {logoG22 ? <img src={logoG22} alt="Giardino22" width="169" height="44" /> : <span class="wordmark">Giardino22</span>}
+      <p>Produzione video, live streaming, podcast ed eventi per aziende, brand e istituzioni.</p>
+    </div>
+    <div>
+      <h4>Navigazione</h4>
+      <nav aria-label="Piè di pagina">
+        <a href={`${SITO}/servizi/`}>Servizi</a><a href={`${SITO}/noleggio-spazi/`}>Noleggio spazi</a>
+        <a href={BASE}>Giardino22 Play</a><a href={`${SITO}/contatti/`}>Contatti</a>
+      </nav>
+    </div>
+    <div>
+      <h4>Contatti</h4>
+      <p>Viale Giovanni da Cermenate 82<br />20141 Milano</p>
+      <p><a href="mailto:hello@giardino22.it">hello@giardino22.it</a><br /><a href="tel:+390222198530">+39 02 2219 8530</a></p>
+    </div>
+    <div class="copy">
+      <span>© {new Date().getFullYear()} Giardino22 Art Lab S.r.l.</span>
+      <span>
+        <a href="https://www.instagram.com/giardino22artlab/" rel="noopener" target="_blank">Instagram</a> ·
+        <a href="https://it.linkedin.com/company/giardino22" rel="noopener" target="_blank">LinkedIn</a> ·
+        <a href="https://www.youtube.com/@giardino22play" rel="noopener" target="_blank">YouTube</a>
+        {PRIVACY && <> · <a href={PRIVACY}>Privacy</a></>}
+      </span>
+    </div>
+   </div>
+  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

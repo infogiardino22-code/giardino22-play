@@ -1,0 +1,23 @@
+---
+import Card from './Card.astro';
+import Icona from './Icona.astro';
+const { id, sopratitolo, titolo, video, forma = 'v', tutti = null, mostraFormat = true } = Astro.props;
+if (!video?.length) return;
+---
+<section class="row wrap" aria-labelledby={`h-${id}`} data-riga>
+  <div class="row__head">
+    <div>
+      {sopratitolo && <div class="eyebrow">{sopratitolo}</div>}
+      <h2 id={`h-${id}`}>{titolo}</h2>
+    </div>
+    <div class="row__tools">
+      {tutti && <a class="all" href={tutti}>Vedi tutti <Icona nome="dx" /></a>}
+      <button class="arrow" type="button" data-dir="-1" aria-label={`${titolo}: indietro`}><Icona nome="sx" /></button>
+      <button class="arrow" type="button" data-dir="1" aria-label={`${titolo}: avanti`}><Icona nome="dx" /></button>
+    </div>
+  </div>
+  <div class={`track track--${forma}`}>
+    {video.map((v) => <Card v={v} forma={forma} mostraFormat={mostraFormat} />)}
+  </div>
+  <div class="prog" aria-hidden="true"><span></span></div>
+</section>

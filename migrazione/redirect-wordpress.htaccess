@@ -1,0 +1,40 @@
+# ─────────────────────────────────────────────────────────────────────────
+#  Redirect dalle vecchie pagine WordPress di Play al nuovo sito.
+#  Da incollare nel file .htaccess di www.giardino22.it, PRIMA delle regole
+#  di WordPress (oppure da inserire nel plugin "Redirection").
+#  Sono 301 permanenti: Google trasferisce il posizionamento alle nuove pagine.
+#
+#  Qui sotto le pagine già mappate. Per le altre basta aggiungere una riga:
+#  Redirect 301 /play/<vecchio-slug>/  https://play.giardino22.it/<format>/<ID YouTube>/
+# ─────────────────────────────────────────────────────────────────────────
+
+# Home e pagine dei format
+RedirectMatch 301 ^/play/?$                 https://play.giardino22.it/
+Redirect 301 /serie/sonno/                  https://play.giardino22.it/sonno/
+Redirect 301 /serie/vite-in-corso/          https://play.giardino22.it/vite-in-corso/
+Redirect 301 /serie/nowtilus/               https://play.giardino22.it/nowtilus/
+
+# SONNO
+Redirect 301 /play/sonno-ep-05-i-disturbi-del-sonno-da-conoscere/                 https://play.giardino22.it/sonno/uUvRxN1bOKE/
+Redirect 301 /play/ep-04-la-routine-perfetta-per-dormire-bene-in-soli-7-giorni/   https://play.giardino22.it/sonno/gNwy4-AvyKU/
+Redirect 301 /play/narcolessia-ti-addormenti-e-sei-gia-nel-sogno-%f0%9f%a7%a0%f0%9f%92%a4-shorts/  https://play.giardino22.it/sonno/Pi27oJhzeU4/
+Redirect 301 /play/cosa-succede-al-cervello-se-non-dormi-per-3-giorni-%f0%9f%a7%a0/                https://play.giardino22.it/sonno/iB5cLB3nO7c/
+
+# Vite in Corso
+Redirect 301 /play/ep-01-vite-in-corso-kevin/                          https://play.giardino22.it/vite-in-corso/JByt8o8XYFk/
+Redirect 301 /play/ep-02-vite-in-corso-elia/                           https://play.giardino22.it/vite-in-corso/kwBo6GwBvC4/
+Redirect 301 /play/ep-03-vite-in-corso-jeremia/                        https://play.giardino22.it/vite-in-corso/tvhS8JXRPIU/
+Redirect 301 /play/ep-04-vite-in-corso-roberta/                        https://play.giardino22.it/vite-in-corso/fIqb8qJKvuk/
+Redirect 301 /play/ep-05-vite-in-corso-gianluca/                       https://play.giardino22.it/vite-in-corso/5taRljgqy_E/
+Redirect 301 /play/ep-06-vite-in-corso-alberto/                        https://play.giardino22.it/vite-in-corso/Ejv-vjTzz0U/
+Redirect 301 /play/ep-07-vite-in-corso-quando-le-storie-si-incontrano/ https://play.giardino22.it/vite-in-corso/Whz8k3O_gIw/
+
+# Nowtilus
+Redirect 301 /play/ai-e-futuro-del-lavoro-siamo-davvero-pronti/                    https://play.giardino22.it/nowtilus/DfBWh9VXL7w/
+Redirect 301 /play/ep-01-why-now-niccolo-calandri-3bee-ascoltare-la-biodiversita/   https://play.giardino22.it/nowtilus/h6b0gPrLRzA/
+Redirect 301 /play/il-talento-che-cerchi-esiste-davvero/                           https://play.giardino22.it/nowtilus/Qv_fvsxG9dY/
+Redirect 301 /play/ai-e-lavoro-i-falsi-miti/                                       https://play.giardino22.it/nowtilus/m12-kWG9PMw/
+Redirect 301 /play/francesca-costa-amplifon-soft-skills-sempre-piu-centrali-nel-mondo-del-lavoro/  https://play.giardino22.it/nowtilus/7HM4ELZYyWw/
+
+# Rete di sicurezza: qualunque altra vecchia pagina di Play porta alla home nuova
+RedirectMatch 301 ^/play/.+$  https://play.giardino22.it/

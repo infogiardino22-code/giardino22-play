@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import Riga from '../components/Riga.astro';
+import { video, url } from '../lib/catalogo.js';
+---
+<Base titolo="Pagina non trovata">
+  <section class="vpage wrap notfound">
+    <div class="eyebrow">Errore 404</div>
+    <h1>Questo video non è più qui.</h1>
+    <p>Forse è stato spostato o rimosso da YouTube. Intanto, ecco le ultime uscite.</p>
+    <a class="btn btn--main" href={url('')}>Torna a Play</a>
+  </section>
+  <div class="stack"><Riga id="nuovi" sopratitolo="Ora su Play" titolo="Ultime uscite" video={video.slice(0, 12)} forma="v" /></div>
+</Base>

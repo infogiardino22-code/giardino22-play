@@ -1,0 +1,41 @@
+# ─────────────────────────────────────────────────────────────
+#  RISORSE DAL VECCHIO SITO
+#
+#  Loghi, font e immagini da prendere una volta sola dal sito WordPress.
+#  Alla prima pubblicazione il robot li scarica e li salva nel progetto;
+#  da lì in poi il sito non dipende più da WordPress.
+#  Se un file esiste già nel progetto non viene riscaricato: per cambiarlo
+#  basta sostituirlo nella sua cartella.
+#
+#  Si accettano solo indirizzi https://www.giardino22.it/
+# ─────────────────────────────────────────────────────────────
+
+# Loghi del sito
+public/brand/giardino22-play.png: https://www.giardino22.it/wp-content/uploads/2026/07/logo_traspa_w.png
+public/brand/giardino22.png: https://www.giardino22.it/wp-content/uploads/2026/07/Logo-Rules_Lite_Bianco-2-scaled-e1783687241742.png
+
+# Font Proxima Nova (verificate che la licenza copra l'uso web)
+public/fonts/ProximaNova-Regular.otf: https://www.giardino22.it/wp-content/uploads/2026/07/Proxima-Nova-Regular.otf
+public/fonts/ProximaNova-Bold.otf: https://www.giardino22.it/wp-content/uploads/2026/07/Proxima-Nova-Bold.otf
+public/fonts/ProximaNova-Black.otf: https://www.giardino22.it/wp-content/uploads/2026/07/Proxima-Nova-Black.otf
+
+# SONNO
+contenuti/produzioni/sonno/hero.png: https://www.giardino22.it/wp-content/uploads/2026/07/studio-sonno-1.png
+contenuti/produzioni/sonno/logo.png: https://www.giardino22.it/wp-content/uploads/2026/07/LOGO-SONNO-1920.png
+contenuti/produzioni/sonno/copertine/uUvRxN1bOKE.jpg: https://www.giardino22.it/wp-content/uploads/2026/10/COVER_PUNTATA-VERTICALE_YT_pt5.jpg
+contenuti/produzioni/sonno/copertine/gNwy4-AvyKU.jpg: https://www.giardino22.it/wp-content/uploads/2026/09/COVER_PUNTATA-VERTICALE_YT.jpg
+
+# Vite in Corso
+contenuti/produzioni/vite-in-corso/hero.png: https://www.giardino22.it/wp-content/uploads/2026/07/WhatsApp-Image-2025-12-24-at-11.01.11-6b.png
+contenuti/produzioni/vite-in-corso/copertine/JByt8o8XYFk.png: https://www.giardino22.it/wp-content/uploads/2026/07/ViteInCorso_Kevin_v.png
+contenuti/produzioni/vite-in-corso/copertine/kwBo6GwBvC4.png: https://www.giardino22.it/wp-content/uploads/2026/07/ViteInCorso_Elia_v.png
+contenuti/produzioni/vite-in-corso/copertine/tvhS8JXRPIU.png: https://www.giardino22.it/wp-content/uploads/2026/07/ViteInCorso_Jeremia_v.png
+contenuti/produzioni/vite-in-corso/copertine/fIqb8qJKvuk.png: https://www.giardino22.it/wp-content/uploads/2026/07/ViteInCorso_Roberta_1_v.png
+contenuti/produzioni/vite-in-corso/copertine/5taRljgqy_E.png: https://www.giardino22.it/wp-content/uploads/2026/07/ViteInCorso_Gianluca_v.png
+contenuti/produzioni/vite-in-corso/copertine/Ejv-vjTzz0U.png: https://www.giardino22.it/wp-content/uploads/2026/07/ViteInCorso_Alberto_v.png
+contenuti/produzioni/vite-in-corso/copertine/Whz8k3O_gIw.png: https://www.giardino22.it/wp-content/uploads/2026/07/ViteInCorso_cartello-finale_01.png
+
+# Nowtilus
+contenuti/produzioni/nowtilus/hero.png: https://www.giardino22.it/wp-content/uploads/2026/09/HERO_INNVATION-TALKS.png
+contenuti/produzioni/nowtilus/copertine/DfBWh9VXL7w.jpg: https://www.giardino22.it/wp-content/uploads/2026/09/Pt01_916_AI-e-fututo.jpg
+contenuti/produzioni/nowtilus/copertine/h6b0gPrLRzA.png: https://www.giardino22.it/wp-content/uploads/2026/07/WHY_NOW_1_VERT.png

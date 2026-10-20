@@ -1,0 +1,43 @@
+# ─────────────────────────────────────────────────────────────
+#  MODELLO PER UN NUOVO FORMAT
+#
+#  1. Copia questa cartella e rinominala con il nome del format,
+#     in minuscolo e con i trattini:  es.  "storie-di-quartiere"
+#     (il nome della cartella diventa l'indirizzo: /play/storie-di-quartiere/)
+#  2. Compila i campi qui sotto.
+#  3. Metti nella cartella:
+#       hero.jpg   immagine orizzontale grande, almeno 1920×1080
+#       logo.png   logo del format su fondo trasparente (anche .svg o .webp)
+#       copertine/ (facoltativa) copertine verticali 9:16 dei video lunghi,
+#                  chiamate con l'ID YouTube:  copertine/uUvRxN1bOKE.jpg
+#  4. Salva. Il sito si aggiorna da solo entro pochi minuti.
+#
+#  Le cartelle che iniziano con "_" (come questa) vengono ignorate.
+# ─────────────────────────────────────────────────────────────
+
+nome: Nome del format
+categoria: Categoria breve
+ordine: 10
+attivo: true
+original: true               # etichetta "G22 Original" sulle card
+
+descrizione: >
+  Due o tre frasi che spiegano di cosa parla il format.
+
+playlist:
+  - https://www.youtube.com/playlist?list=INCOLLA_QUI_LA_PLAYLIST
+
+in_evidenza:
+  hero: no
+  da_non_perdere: no
+
+social:
+  youtube:
+  spotify:
+  amazon_music:
+  apple_podcasts:
+  instagram:
+  tiktok:
+  linkedin:
+  facebook:
+  sito:

@@ -1,0 +1,91 @@
+---
+import Base from '../layouts/Base.astro';
+import Riga from '../components/Riga.astro';
+import Icona from '../components/Icona.astro';
+import { produzioni, video, perId, perSlug, heroIds, dnpIds, videoDi, linkVideo, linkFormat, media, url, infoVideo, eNuovo, primaRiga } from '../lib/catalogo.js';
+
+const hero = heroIds.map(id => perId.get(id)).filter(Boolean);
+const ultime = video.slice(0, 16);
+const dnp = dnpIds.map(id => perId.get(id)).filter(Boolean);
+const DURATA_SLIDE = 8000;
+const parole = (t) => String(t).split(/\s+/).filter(Boolean);
+const NASTRO = ['Serie originali', 'Podcast', 'Videopodcast', 'Interviste', 'Storie vere', 'Clip e short', 'Nuovi format'];
+
+const jsonld = {
+  '@context': 'https://schema.org', '@type': 'WebSite', name: 'Giardino22 Play',
+  url: new URL(url(''), Astro.site).href, publisher: { '@type': 'Organization', name: 'Giardino22 Art Lab S.r.l.', url: 'https://www.giardino22.it' },
+};
+---
+<Base immagine={hero[0] ? media(hero[0].img.og) : null} jsonld={jsonld}>
+  <h1 class="sr">Giardino22 Play</h1>
+
+  {hero.length > 0 && (
+    <section class="hero" id="hero" aria-roledescription="carosello" aria-label="In evidenza" data-durata={DURATA_SLIDE}>
+      {hero.map((v, i) => {
+        const p = perSlug.get(v.produzione);
+        return (
+          <article class={`slide${i === 0 ? ' on' : ''}`} aria-roledescription="slide" aria-label={`${i + 1} di ${hero.length}`} aria-hidden={i === 0 ? 'false' : 'true'}>
+            <div class="slide__bgw">
+              <img class="slide__bg" src={media(p.img.hero)} srcset={`${media(p.img.heroPiccola)} 960w, ${media(p.img.hero)} 1920w`} sizes="100vw"
+                alt="" width="1920" height="1080" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} decoding="async" />
+            </div>
+            <div class="slide__body wrap"><div class="slide__inner">
+              {p.img.logo && <img class="slide__logo fx d0" src={media(p.img.logo)} alt={p.nome} />}
+              <div class="eyebrow fx d1">{p.img.logo ? '' : `${p.nome} · `}{p.categoria}</div>
+              <h2 class="slide__title">{parole(v.titolo).map((w, j) => <><span class="w"><span>{w}</span></span>{' '}</>)}</h2>
+              <p class="fx d2">{primaRiga(v.descrizione, 220)}</p>
+              <div class="meta fx d3">
+                {eNuovo(v) && <span class="tag tag--new">Nuovo</span>}
+                {infoVideo(v, { data: true }).map((x, j) => <>{j > 0 && <i></i>}<span>{x}</span></>)}
+              </div>
+              <div class="btns fx d4">
+                <a class="btn btn--main" href={linkVideo(v)} tabindex={i === 0 ? undefined : '-1'}><Icona nome="play" /> Guarda ora</a>
+                <a class="btn btn--ghost" href={linkFormat(v.produzione)} tabindex={i === 0 ? undefined : '-1'}><Icona nome="lista" /> Tutti gli episodi</a>
+              </div>
+            </div></div>
+          </article>
+        );
+      })}
+      {hero.length > 1 && (
+        <div class="picker wrap" role="tablist" aria-label="Scegli il contenuto in evidenza">
+          {hero.map((v, i) => (
+            <button class={`pick${i === 0 ? ' on' : ''}`} type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-i={i}>
+              <div><small>{perSlug.get(v.produzione).nome}</small><b>{v.titolo}</b></div>
+              <div class="bar"><span></span></div>
+            </button>
+          ))}
+        </div>
+      )}
+    </section>
+  )}
+
+  <main class="stack">
+    <Riga id="nuovi" sopratitolo="Ora su Play" titolo="Ultime uscite" video={ultime} forma="v" />
+    <Riga id="dnp" sopratitolo="In evidenza" titolo="Da non perdere" video={dnp} forma="h" />
+    {produzioni.map(p => (
+      <Riga id={p.slug} sopratitolo={p.categoria} titolo={p.nome} video={videoDi(p.slug)} forma="v" tutti={linkFormat(p.slug)} mostraFormat={false} />
+    ))}
+  </main>
+
+  <div class="marquee" aria-hidden="true"><div class="marquee__t">
+    {[...NASTRO, ...NASTRO].map(x => <span>{x}<i>✦</i></span>)}
+  </div></div>
+
+  <section class="about wrap reveal">
+    <div class="about__top">
+      <div>
+        <div class="eyebrow">Giardino22 Originals</div>
+        <h2>Storie, format e nuovi punti di vista.</h2>
+      </div>
+      <div class="about__txt">
+        <p>Giardino22 Play è il progetto editoriale di Giardino22.</p>
+        <p>Podcast, interviste e produzioni originali pensati per informare, raccontare e creare nuove connessioni.</p>
+        <a class="btn btn--main" href="https://www.giardino22.it/contatti/">Proponi un format</a>
+      </div>
+    </div>
+    <ul class="about__list">
+      <li>Serie originali</li><li>Podcast e videopodcast</li><li>Interviste e talk</li>
+      <li>Storie vere</li><li>Clip e contenuti brevi</li><li>Nuovi format in produzione</li>
+    </ul>
+  </section>
+</Base>

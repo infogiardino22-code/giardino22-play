@@ -1,0 +1,115 @@
+# Aggiorna Play da YouTube e pubblica su GitHub Pages (play.giardino22.it).
+#
+#  - ogni ora dalle 7 alle 23 (ora italiana): controlla le playlist e,
+#    SOLO se è cambiato qualcosa, ripubblica il sito
+#  - a ogni modifica dei contenuti (push su main): ripubblica subito
+#  - pulsante "Run workflow" su GitHub: aggiornamento manuale immediato
+#
+# Unico segreto richiesto (Settings → Secrets and variables → Actions → Secrets):
+#   YOUTUBE_API_KEY   chiave YouTube Data API v3, limitata a quella sola API
+# Variabili facoltative (scheda Variables): SITE_URL, BASE_PATH, PRIVACY_URL
+name: Aggiorna e pubblica Play
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '17 5-21 * * *'      # UTC → 7:17–23:17 in Italia (ora legale)
+  workflow_dispatch:
+
+permissions:
+  contents: write     # solo per salvare nel repository le risorse importate dal vecchio sito
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pubblica-play
+  cancel-in-progress: false
+
+jobs:
+  pubblica:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci --no-audit --no-fund
+
+      # Prima pubblicazione: loghi, font e immagini vengono presi dal vecchio sito
+      # e salvati nel repository. Le volte successive non scarica nulla.
+      - name: Importa le risorse mancanti dal vecchio sito
+        run: |
+          node scripts/importa-risorse.mjs
+          if [ -n "$(git status --porcelain -- public/brand public/fonts contenuti)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add public/brand public/fonts contenuti
+            git commit -m "Importa loghi, font e immagini dal vecchio sito"
+            git push
+          fi
+
+      - name: Recupera immagini e impronta dell'ultima pubblicazione
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            public/media
+            .ultima-impronta
+          key: play-media-${{ github.run_id }}
+          restore-keys: play-media-
+
+      - name: Sincronizza con YouTube
+        run: npm run sync
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+
+      - name: È cambiato qualcosa?
+        id: diff
+        run: |
+          NUOVA=$(cat src/data/impronta.txt)
+          VECCHIA=$(cat .ultima-impronta 2>/dev/null || echo "")
+          if [ "${{ github.event_name }}" != "schedule" ] || [ "$NUOVA" != "$VECCHIA" ]; then
+            echo "pubblica=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "pubblica=false" >> "$GITHUB_OUTPUT"
+            echo "Nessun video nuovo: il sito resta com'è."
+          fi
+
+      - name: Genera il sito
+        if: steps.diff.outputs.pubblica == 'true'
+        run: npm run build
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://play.giardino22.it' }}
+          BASE_PATH: ${{ vars.BASE_PATH || '/' }}
+          PRIVACY_URL: ${{ vars.PRIVACY_URL }}
+
+      - name: Prepara la pubblicazione
+        if: steps.diff.outputs.pubblica == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Pubblica su GitHub Pages
+        id: deploy
+        if: steps.diff.outputs.pubblica == 'true'
+        uses: actions/deploy-pages@v4
+
+      - name: Ricorda l'impronta pubblicata
+        if: steps.diff.outputs.pubblica == 'true'
+        run: cp src/data/impronta.txt .ultima-impronta
+
+      - name: Salva immagini e impronta
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            public/media
+            .ultima-impronta
+          key: play-media-${{ github.run_id }}

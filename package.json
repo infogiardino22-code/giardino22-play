@@ -1,0 +1,19 @@
+{
+  "name": "giardino22-play",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "sync": "node scripts/sync-youtube.mjs",
+    "sync:demo": "node scripts/sync-youtube.mjs --demo",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check:contenuti": "node scripts/sync-youtube.mjs --solo-verifica"
+  },
+  "dependencies": {
+    "astro": "7.3.5",
+    "sharp": "0.35.5",
+    "yaml": "2.9.1"
+  }
+}

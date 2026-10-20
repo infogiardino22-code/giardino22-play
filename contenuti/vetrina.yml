@@ -1,0 +1,26 @@
+# ─────────────────────────────────────────────────────────────
+#  VETRINA — scelte editoriali della home
+#
+#  Incolla i link dei video YouTube (o solo l'ID).
+#  Quello che scrivi qui ha la precedenza sulle impostazioni
+#  "in_evidenza" dei singoli format. Se un elenco resta vuoto,
+#  il sito lo riempie da solo con le ultime uscite.
+# ─────────────────────────────────────────────────────────────
+
+# Le 3 slide grandi in cima alla home (al massimo 3, in quest'ordine)
+hero:
+  - https://youtu.be/uUvRxN1bOKE        # SONNO ep. 05
+  - https://youtu.be/Whz8k3O_gIw        # Vite in Corso ep. 07
+  - https://youtu.be/DfBWh9VXL7w        # Nowtilus – AI e futuro del lavoro
+
+# Riga "Da non perdere" (formato orizzontale, al massimo 12)
+da_non_perdere:
+  - uUvRxN1bOKE
+  - DfBWh9VXL7w
+  - Whz8k3O_gIw
+  - h6b0gPrLRzA
+  - JByt8o8XYFk
+
+# Video da non mostrare mai sul sito (prove, trailer vecchi, doppioni)
+nascondi:
+  - k7c-YFBWT4c

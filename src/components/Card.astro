@@ -1,0 +1,30 @@
+---
+// Card video: testo sopra la miniatura, su una sfumatura scura con leggera sfocatura
+// (così il testo già presente nella miniatura non si mescola con il titolo).
+import Icona from './Icona.astro';
+import { perSlug, linkVideo, media, infoVideo, eNuovo, primaRiga } from '../lib/catalogo.js';
+const { v, forma = 'v', mostraFormat = true } = Astro.props;
+const p = perSlug.get(v.produzione);
+const info = infoVideo(v, { compatta: true });
+const w = forma === 'v' ? 540 : 960, h = forma === 'v' ? 960 : 540;
+const nuovo = eNuovo(v);
+---
+<a class={`card card--${forma}`} href={linkVideo(v)} aria-label={`${v.titolo} · ${p?.nome} · ${v.durata}`}>
+  <div class="thumb">
+    <img class="main" src={media(forma === 'v' ? v.img.v : v.img.h)} alt="" width={w} height={h} loading="lazy" decoding="async" />
+    <span class="shade"></span>
+    {(p?.original || nuovo) && (
+      <div class="tags">
+        {p?.original && <span class="tag">G22 Original</span>}
+        {nuovo && <span class="tag tag--new">Nuovo</span>}
+      </div>
+    )}
+    <span class="play" aria-hidden="true"><Icona nome="play" /></span>
+    <div class="ov">
+      {mostraFormat && <span class="eyebrow">{p?.nome}</span>}
+      <h3>{v.titolo}</h3>
+      <div class="meta">{info.map((x, i) => <>{i > 0 && <i></i>}<span>{x}</span></>)}</div>
+      <p>{primaRiga(v.descrizione, 140)}</p>
+    </div>
+  </div>
+</a>
