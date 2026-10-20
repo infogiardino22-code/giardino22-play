@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import Card from '../../components/Card.astro';
 import Riga from '../../components/Riga.astro';
 import Icona from '../../components/Icona.astro';
-import { produzioni, episodiDi, videoDi, linkVideo, media, url, ETICHETTE } from '../../lib/catalogo.js';
+import { produzioni, episodiDi, videoDi, linkVideo, media, url, ETICHETTE , classeLogo } from '../../lib/catalogo.js';
 
 export function getStaticPaths() {
   return produzioni.map(p => ({ params: { produzione: p.slug }, props: { p } }));
@@ -22,7 +22,7 @@ const jsonld = {
   <section class="shero">
     <img src={media(p.img.hero)} srcset={`${media(p.img.heroPiccola)} 960w, ${media(p.img.hero)} 1920w`} sizes="100vw" alt="" width="1920" height="1080" fetchpriority="high" />
     <div class="wrap">
-      {p.img.logo && <img class="slide__logo" src={media(p.img.logo)} alt="" />}
+      {p.img.logo && <img class={`slide__logo ${classeLogo(p)}`} src={media(p.img.logo)} alt="" />}
       <div class="eyebrow">{p.categoria} · {p.conteggio.episodi} episodi{p.conteggio.short ? ` · ${p.conteggio.short} clip` : ''}</div>
       <h1 class={p.img.logo ? 'sr' : ''}>{p.nome}</h1>
       <p>{p.descrizione}</p>

@@ -569,13 +569,21 @@ async function generaImmaginiProduzione(p, videoPiuRecente) {
         errore(`produzioni/${p.slug}/logo.svg`, 'il file SVG contiene script o riferimenti esterni: esportalo di nuovo come PNG');
       } else {
         out.logo = `p/${p.slug}-logo-${sha(s)}.svg`;
+        const vb = s.match(/viewBox\s*=\s*["'][\d.\-]+[\s,]+[\d.\-]+[\s,]+([\d.]+)[\s,]+([\d.]+)/i);
+        if (vb && +vb[2] > 0) out.logoRapporto = +(+vb[1] / +vb[2]).toFixed(2);
         await fs.writeFile(path.join(DIR_MEDIA, out.logo), buf);
       }
     } else {
-      out.logo = `p/${p.slug}-logo-${sha(buf.subarray(0, 4096).toString('base64') + buf.length)}.webp`;
-      if (!existsSync(path.join(DIR_MEDIA, out.logo))) {
-        await sharp(buf).resize({ width: 720, withoutEnlargement: true }).webp({ quality: 90, alphaQuality: 100 }).toFile(path.join(DIR_MEDIA, out.logo));
+      // v2: margini trasparenti tagliati, così tutti i loghi si misurano sul disegno vero
+      out.logo = `p/${p.slug}-logo-${sha('v2' + buf.subarray(0, 4096).toString('base64') + buf.length)}.webp`;
+      const dest = path.join(DIR_MEDIA, out.logo);
+      if (!existsSync(dest)) {
+        const tagliato = await sharp(buf).trim({ threshold: 1 }).toBuffer().catch(() => buf);
+        await sharp(tagliato).resize({ width: 900, height: 360, fit: 'inside', withoutEnlargement: true })
+          .webp({ quality: 90, alphaQuality: 100 }).toFile(dest);
       }
+      const m = await sharp(dest).metadata();
+      out.logoRapporto = +(m.width / m.height).toFixed(2);
     }
   }
   return out;

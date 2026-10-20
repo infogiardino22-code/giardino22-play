@@ -55,3 +55,10 @@ export const ETICHETTE = {
   youtube: 'YouTube', spotify: 'Spotify', amazon_music: 'Amazon Music', apple_podcasts: 'Apple Podcasts',
   instagram: 'Instagram', tiktok: 'TikTok', linkedin: 'LinkedIn', facebook: 'Facebook', sito: 'Sito web',
 };
+
+/** Classe CSS per dimensionare il logo in base alla forma: loghi larghi più bassi, compatti più alti,
+ *  così tutti occupano più o meno la stessa area. */
+export const classeLogo = (p) => {
+  const r = p?.img?.logoRapporto ?? 3;
+  return 'logo-r' + Math.max(1, Math.min(7, Math.round(r)));
+};

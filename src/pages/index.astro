@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Riga from '../components/Riga.astro';
 import Icona from '../components/Icona.astro';
-import { produzioni, video, perId, perSlug, heroIds, dnpIds, videoDi, linkVideo, linkFormat, media, url, infoVideo, eNuovo, primaRiga } from '../lib/catalogo.js';
+import { produzioni, video, perId, perSlug, heroIds, dnpIds, videoDi, linkVideo, linkFormat, media, url, infoVideo, eNuovo, primaRiga , classeLogo } from '../lib/catalogo.js';
 
 const hero = heroIds.map(id => perId.get(id)).filter(Boolean);
 const ultime = video.slice(0, 16);
@@ -30,7 +30,7 @@ const jsonld = {
                 alt="" width="1920" height="1080" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} decoding="async" />
             </div>
             <div class="slide__body wrap"><div class="slide__inner">
-              {p.img.logo && <img class="slide__logo fx d0" src={media(p.img.logo)} alt={p.nome} />}
+              {p.img.logo && <img class={`slide__logo ${classeLogo(p)} fx d0`} src={media(p.img.logo)} alt={p.nome} />}
               <div class="eyebrow fx d1">{p.img.logo ? '' : `${p.nome} · `}{p.categoria}</div>
               <h2 class="slide__title">{parole(v.titolo).map((w, j) => <><span class="w"><span>{w}</span></span>{' '}</>)}</h2>
               <p class="fx d2">{primaRiga(v.descrizione, 220)}</p>
