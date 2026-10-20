@@ -426,7 +426,9 @@ export function titoloVetrina(t, nomeFormat) {
   const reNome = new RegExp('(^|[^\\p{L}])' + escRe(nomeFormat) + '($|[^\\p{L}])', 'u');
   const reEp = /\b(?:ep(?:isodio)?|puntata)\.?\s*\d+/i;
   const soloEp = /^(?:ep(?:isodio)?|puntata)\.?\s*\d+$/i;
-  let tenuti = pezzi.filter(p => !reNome.test(p) && !soloEp.test(p));
+  // un pezzo che è solo il nome del format (anche in MAIUSCOLO: "VITE IN CORSO") va tolto
+  const soloNome = (p) => p.replace(/[^\p{L}\p{N} ]/gu, '').trim().toLowerCase() === nomeFormat.toLowerCase();
+  let tenuti = pezzi.filter(p => !reNome.test(p) && !soloEp.test(p) && !soloNome(p));
   if (tenuti.length === 0) tenuti = pezzi.filter(p => !reEp.test(p));
   if (tenuti.length === 0) return base;
   return tenuti.join(' · ');
