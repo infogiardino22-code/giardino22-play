@@ -27,10 +27,22 @@
     addEventListener('scroll', () => { if (!inAttesa) { inAttesa = true; requestAnimationFrame(suScroll); } }, { passive: true });
     suScroll();
 
-    if (burger && nav) burger.addEventListener('click', () => {
-      const aperto = nav.classList.toggle('open');
+    /* Menu del telefono a tutto schermo */
+    const menu = (aperto) => {
+      if (!burger || !nav) return;
+      nav.classList.toggle('open', aperto);
+      top.classList.toggle('menu-aperto', aperto);
+      document.documentElement.classList.toggle('menu-aperto', aperto);
       burger.setAttribute('aria-expanded', String(aperto));
-    });
+      burger.setAttribute('aria-label', aperto ? 'Chiudi il menu' : 'Apri il menu');
+      if (aperto) { const primo = $('a', nav); if (primo) primo.focus({ preventScroll: true }); }
+    };
+    if (burger && nav) {
+      burger.addEventListener('click', () => menu(!nav.classList.contains('open')));
+      $$('a', nav).forEach(a => a.addEventListener('click', () => menu(false)));
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && nav.classList.contains('open')) { menu(false); burger.focus(); } });
+      matchMedia('(min-width: 761px)').addEventListener('change', e => { if (e.matches) menu(false); });
+    }
 
     /* Comparsa allo scroll: righe, card in sequenza, blocchi */
     if (document.documentElement.classList.contains('anim')) {

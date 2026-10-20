@@ -63,12 +63,31 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .nav a:hover::after, .nav a[aria-current]::after { transform: scaleX(1); transform-origin: left; }
 .nav a[aria-current] { color: var(--mint); }
 .burger { display: none; background: none; border: 0; padding: 8px; cursor: pointer; font-size: 24px; }
+/* Menu del telefono: come sul sito Giardino22. Pannello a tutto schermo sopra la pagina
+   sfocata e scurita, voci in alto a sinistra, voce attiva verde sottolineata, X in alto a destra. */
+.burger .ico-chiudi { display: none; }
 @media (max-width: 760px) {
-  .nav { display: none; }
-  .burger { display: block; }
-  .nav.open { display: flex; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 0; background: var(--surface); }
-  .nav.open a { padding: 16px var(--gutter); border-top: 1px solid var(--line); }
-  .nav.open a::after { display: none; }
+  .burger { display: block; position: relative; z-index: 62; }
+  .nav { position: fixed; inset: 0; z-index: 61; display: flex; flex-direction: column; align-items: flex-start; gap: 22px;
+    padding: calc(env(safe-area-inset-top, 0px) + 26px) max(var(--gutter), env(safe-area-inset-right, 0px)) 40px max(var(--gutter), env(safe-area-inset-left, 0px));
+    font: 400 19px/1.2 var(--font); isolation: isolate;
+    opacity: 0; visibility: hidden; transition: opacity .3s var(--ease), visibility .3s; }
+  /* la sfocatura sborda oltre lo schermo così anche i bordi restano sfocati */
+  .nav::before { content: ""; position: absolute; inset: -60px; z-index: -1; background: linear-gradient(to bottom, rgba(11,11,11,.92) 60px, rgba(11,11,11,.6) 180px);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  .nav.open { opacity: 1; visibility: visible; }
+  .nav a { padding: 2px 0 4px; font-weight: 400; color: var(--fg); opacity: 0; transform: translate3d(0, -6px, 0); transition: opacity .35s var(--ease), transform .35s var(--ease), color .2s; }
+  .nav.open a { opacity: 1; transform: none; }
+  .nav.open a:nth-child(2) { transition-delay: .04s; } .nav.open a:nth-child(3) { transition-delay: .08s; } .nav.open a:nth-child(4) { transition-delay: .12s; }
+  .nav a::after { bottom: 0; height: 2px; }
+  .nav a:hover::after { transform: scaleX(0); }
+  .nav a[aria-current]::after { transform: scaleX(1); }
+  /* Con il menu aperto l'header non deve sfocare né spostarsi (altrimenti il pannello resterebbe dentro l'header) */
+  .top.menu-aperto { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; transform: none; }
+  .top.menu-aperto .top__logo { visibility: hidden; }
+  .top.menu-aperto .burger .ico-menu { display: none; }
+  .top.menu-aperto .burger .ico-chiudi { display: block; }
+  html.menu-aperto { overflow: hidden; }
 }
 
 /* ---------- Hero ---------- */
