@@ -1,5 +1,6 @@
 ---
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import Icona from '../components/Icona.astro';
 import { url, BASE } from '../lib/catalogo.js';
 
@@ -21,6 +22,9 @@ const logoG22 = existsSync('public/brand/giardino22.png') ? url('brand/giardino2
 const fontWoff2 = existsSync('public/fonts/ProximaNova-Black.woff2');
 const fontOtf = existsSync('public/fonts/ProximaNova-Black.otf');
 const SITO = 'https://www.giardino22.it';
+// Versione dei file = impronta del loro contenuto: quando cambiano, il browser li riscarica
+const versione = (p) => { try { return createHash('sha1').update(readFileSync('public/' + p)).digest('hex').slice(0, 8); } catch { return '0'; } };
+const asset = (p) => url(p) + '?v=' + versione(p);
 // Profili di Giardino22 Play (banner "Segui")
 const PLAY_SOCIAL = {
   youtube: 'https://www.youtube.com/@giardino22play',
@@ -57,10 +61,10 @@ const PRIVACY = import.meta.env.PRIVACY_URL || process.env.PRIVACY_URL || '';
   <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
   {fontWoff2 && <link rel="preload" href={url('fonts/ProximaNova-Black.woff2')} as="font" type="font/woff2" crossorigin />}
   {!fontWoff2 && fontOtf && <link rel="preload" href={url('fonts/ProximaNova-Black.otf')} as="font" type="font/otf" crossorigin />}
-  <link rel="stylesheet" href={url('css/play.css')} />
+  <link rel="stylesheet" href={asset('css/play.css')} />
   {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld).replace(/</g, '\\u003c')} />}
-  <script is:inline src={url('js/anim.js')}></script>
-  <script is:inline src={url('js/play.js')} defer></script>
+  <script is:inline src={asset('js/anim.js')}></script>
+  <script is:inline src={asset('js/play.js')} defer></script>
 </head>
 <body>
   <a class="skip" href="#contenuto">Vai al contenuto</a>
