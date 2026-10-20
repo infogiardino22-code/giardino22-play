@@ -33,12 +33,12 @@ social:
   youtube: https://www.youtube.com/playlist?list=PLEithlnxrIT4
   spotify: https://open.spotify.com/show/033ONghYr8Wv5Vp0aHW4aY
   amazon_music: https://music.amazon.it/podcasts/c982c0cc-f469-49bb-8d5c-bbc42b6e2936/sonno
-  apple_podcasts:
-  instagram:
+  apple_podcasts: https://podcasts.apple.com/us/podcast/sonno/id6793468409
+  instagram: https://www.instagram.com/sonno_ilpodcast/
   tiktok:
   linkedin:
   facebook:
-  sito:
+  sito: https://www.giardino22.it/sonno/
 
 # Facoltativo: link per singolo episodio (es. la puntata su Spotify).
 # La chiave è l'ID o il link del video YouTube.
