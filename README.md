@@ -64,8 +64,12 @@ zona, si perde e non si mescola con il titolo della card. In alto a sinistra le 
 7 giorni). Per l'immagine verticale il sito sceglie, in ordine:
 1. la vostra copertina in `copertine/ID.jpg`, se c'è;
 2. per gli Short, la miniatura verticale nativa di YouTube (1080×1920);
-3. altrimenti ritaglia la miniatura orizzontale con un ritaglio "intelligente", che cerca volti e
-   dettagli invece di tagliare a caso al centro.
+3. altrimenti ritaglia la miniatura orizzontale **allineandola a sinistra**, dove di solito inizia il
+   titolo. Per un format si può cambiare con `ritaglio_verticale: centro`, `destra` o `auto`
+   (che cerca volti e dettagli).
+
+Gli Short vengono riconosciuti da soli, anche quando stanno nella stessa playlist delle puntate:
+il sito controlla se YouTube ha la miniatura verticale nativa del video.
 
 Per i video lunghi importanti conviene caricare la copertina verticale (le avete già, sono le
 `*_VERTICALE*` del vecchio sito).

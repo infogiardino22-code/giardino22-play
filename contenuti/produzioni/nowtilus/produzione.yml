@@ -10,6 +10,8 @@ descrizione: >
   qui li trovi tutti insieme.
 
 # Playlist di canali diversi finiscono nello stesso carosello, senza distinzioni.
+# Nella playlist Nowtilus ci sono sia puntate orizzontali sia short verticali:
+# il sito li riconosce da solo e li mette in "Episodi" e in "Clip e Short".
 playlist:
   - https://www.youtube.com/playlist?list=PLHP22uN9w1_vzB2UOL5HWCPUWciHLiVAJ   # WHY NOW — Innovation Talks (canale Nowtilus Media)
   - https://www.youtube.com/playlist?list=PLOM9vjG_gu2M                        # Why Now – short (canale Giardino22 Play)

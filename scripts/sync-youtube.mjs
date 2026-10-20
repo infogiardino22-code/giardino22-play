@@ -188,6 +188,9 @@ async function leggiProduzioni() {
       if (!id) errore(doveF, `playlist o canale non riconosciuto: ${p}`);
       else playlist.push(id);
     }
+    const RITAGLI = { sinistra: 'left', centro: 'centre', destra: 'right', auto: 'attention' };
+    const ritaglio = String(d.ritaglio_verticale ?? 'sinistra').toLowerCase();
+    if (!RITAGLI[ritaglio]) errore(doveF, 'ritaglio_verticale deve essere "sinistra", "centro", "destra" o "auto"');
     const escludi = (Array.isArray(d.escludi_titoli) ? d.escludi_titoli : [])
       .map(x => String(x).trim().toLowerCase()).filter(Boolean);
 
@@ -245,6 +248,7 @@ async function leggiProduzioni() {
       social,
       linkEpisodi,
       escludi,
+      ritaglio: RITAGLI[ritaglio] ?? 'left',
       fileHero, fileLogo, copertine,
     });
   }
@@ -333,13 +337,21 @@ function secondiISO(iso) {
   return (+m[1] || 0) * 86400 + (+m[2] || 0) * 3600 + (+m[3] || 0) * 60 + (+m[4] || 0);
 }
 
-/** YouTube risponde 200 su /shorts/ID solo se il video è davvero uno Short. */
+/**
+ * È uno Short? Prova principale: YouTube genera la miniatura verticale nativa (oar2.jpg,
+ * 1080×1920) solo per i video verticali; per gli orizzontali restituisce un segnaposto 120×90.
+ * Prova di riserva: la pagina /shorts/ID risponde 200 solo per gli Short.
+ */
 async function eShort(id, secondi) {
   if (secondi > SHORT_MAX_SECONDI) return false;
+  const b = await scarica(`https://i.ytimg.com/vi/${id}/oar2.jpg`);
+  if (b) {
+    const m = await sharp(b).metadata().catch(() => null);
+    if (m && m.width > 200) return m.height > m.width;
+  }
   try {
     const r = await fetch(`https://www.youtube.com/shorts/${id}`, { method: 'HEAD', redirect: 'manual' });
     if (r.status === 200) return true;
-    if (r.status >= 300 && r.status < 400) return false;
   } catch { /* rete: decide la durata */ }
   return secondi <= 60;
 }
@@ -491,7 +503,7 @@ async function generaImmaginiVideo(v, prod) {
   const fileOG = path.join(dir, `${v.id}-og.jpg`);   // anteprima per WhatsApp/LinkedIn/Facebook
   const copertina = prod.copertine[v.id];
   // la copertina personalizzata cambia → rigenera la verticale
-  const firma = copertina ? sha((await fs.readFile(copertina)).toString('base64')) : (DEMO ? 'demo' : 'yt');
+  const firma = (copertina ? sha((await fs.readFile(copertina)).toString('base64')) : (DEMO ? 'demo' : 'yt')) + '-' + prod.ritaglio;
   const fileFirma = path.join(dir, `${v.id}.firma`);
   const firmaVecchia = existsSync(fileFirma) ? await fs.readFile(fileFirma, 'utf8') : '';
   if (existsSync(fileH) && existsSync(fileV) && existsSync(fileOG) && firmaVecchia === firma) return;
@@ -522,8 +534,11 @@ async function generaImmaginiVideo(v, prod) {
   if (sorgenteV) {
     await sharp(sorgenteV).rotate().resize(540, 960, { fit: 'cover', position: 'attention' }).webp(WEBP).toFile(fileV);
   } else {
-    // nessuna verticale: sharp cerca la zona più interessante (volti, contrasto) invece del centro
-    await sharp(orizz).resize(540, 960, { fit: 'cover', position: sharp.strategy.attention }).webp(WEBP).toFile(fileV);
+    // Puntata orizzontale senza copertina verticale: ritaglio 9:16 allineato a sinistra
+    // (di solito il titolo nella miniatura parte da sinistra). Si cambia per format
+    // con "ritaglio_verticale" nella scheda.
+    const pos = prod.ritaglio === 'attention' ? sharp.strategy.attention : prod.ritaglio;
+    await sharp(orizz).resize(540, 960, { fit: 'cover', position: pos }).webp(WEBP).toFile(fileV);
   }
   await fs.writeFile(fileFirma, firma);
 }

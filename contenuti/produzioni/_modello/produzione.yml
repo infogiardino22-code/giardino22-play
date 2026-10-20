@@ -29,6 +29,10 @@ descrizione: >
 playlist:
   - https://www.youtube.com/playlist?list=INCOLLA_QUI_LA_PLAYLIST
 
+# Come ritagliare in verticale le puntate orizzontali senza copertina verticale:
+# sinistra (predefinito) | centro | destra | auto (cerca volti e dettagli)
+# ritaglio_verticale: sinistra
+
 # Facoltativo: nasconde i video il cui titolo contiene una di queste parole
 # escludi_titoli:
 #   - Trailer
