@@ -9,9 +9,15 @@ descrizione: >
   da chi le ha vissute: gang giovanili, carcere minorile, comunità educative
   e la strada per ricominciare.
 
+# Si possono mettere playlist oppure un intero canale: con il canale
+# ogni nuovo video caricato lì arriva sul sito da solo.
 playlist:
-  - PLCTbdoQpEPIQ          # short
-  # Aggiungere qui la playlist con gli episodi lunghi (Ep. 01–07)
+  - https://www.youtube.com/@ViteinCorso   # episodi (canale Vite in Corso)
+  - PLCTbdoQpEPIQ                          # short (canale Giardino22 Play)
+
+# Video da non mostrare se il titolo contiene una di queste parole
+escludi_titoli:
+  - Intro
 
 in_evidenza:
   hero: no

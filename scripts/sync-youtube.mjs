@@ -79,6 +79,23 @@ export function idPlaylist(valore) {
 }
 
 /**
+ * Accetta il link di un canale YouTube (youtube.com/@nome oppure /channel/UC…)
+ * e restituisce "canale:@nome" o "canale:UC…". Il sito userà la playlist automatica
+ * "tutti i caricamenti" del canale, che YouTube aggiorna da solo a ogni nuovo video.
+ */
+export function idCanale(valore) {
+  try {
+    const u = new URL(String(valore ?? '').trim());
+    if (!/(^|\.)youtube\.com$/.test(u.hostname)) return null;
+    const h = u.pathname.match(/^\/(@[A-Za-z0-9._-]{3,100})\/?/);
+    if (h) return 'canale:' + h[1];
+    const c = u.pathname.match(/^\/channel\/(UC[A-Za-z0-9_-]{22})\/?/);
+    if (c) return 'canale:' + c[1];
+  } catch { /* non è un link */ }
+  return null;
+}
+
+/**
  * Social ammessi e domini consentiti per ciascuno. Un link che non rispetta
  * il dominio viene rifiutato: così nessuno può infilare link a siti estranei
  * o pseudo-link tipo "javascript:" nelle schede.
@@ -167,10 +184,12 @@ async function leggiProduzioni() {
 
     const playlist = [];
     for (const p of d.playlist ?? []) {
-      const id = idPlaylist(p);
-      if (!id) errore(doveF, `playlist non riconosciuta: ${p}`);
+      const id = idPlaylist(p) ?? idCanale(p);
+      if (!id) errore(doveF, `playlist o canale non riconosciuto: ${p}`);
       else playlist.push(id);
     }
+    const escludi = (Array.isArray(d.escludi_titoli) ? d.escludi_titoli : [])
+      .map(x => String(x).trim().toLowerCase()).filter(Boolean);
 
     const ev = d.in_evidenza ?? {};
     const hero = String(ev.hero ?? 'no').toLowerCase();
@@ -225,6 +244,7 @@ async function leggiProduzioni() {
       evidenza: { hero: hero === 'ultimo', dnp },
       social,
       linkEpisodi,
+      escludi,
       fileHero, fileLogo, copertine,
     });
   }
@@ -286,6 +306,17 @@ async function videoDellaPlaylist(playlistId) {
   return ids;
 }
 
+/** "canale:@nome" o "canale:UC…" → ID della playlist automatica con tutti i caricamenti */
+async function playlistCaricamenti(rif) {
+  const chiave = rif.slice('canale:'.length);
+  const q = new URLSearchParams({ part: 'contentDetails', key: API_KEY });
+  if (chiave.startsWith('@')) q.set('forHandle', chiave); else q.set('id', chiave);
+  const j = await getJSON(`${API}/channels?${q}`);
+  const up = j.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
+  if (!up) throw new Error('canale non trovato');
+  return up;
+}
+
 async function dettagliVideo(ids) {
   const out = [];
   for (let i = 0; i < ids.length; i += 50) {
@@ -318,7 +349,7 @@ async function scaricaCatalogoYouTube(produzioni, nascondi) {
   for (const p of produzioni) {
     for (const pl of p.playlist) {
       let ids;
-      try { ids = await videoDellaPlaylist(pl); }
+      try { ids = await videoDellaPlaylist(pl.startsWith('canale:') ? await playlistCaricamenti(pl) : pl); }
       catch (e) { errore(`produzioni/${p.slug}`, `playlist ${pl} non leggibile (${e.message})`); continue; }
       if (ids.length === 0) avviso(`produzioni/${p.slug}`, `la playlist ${pl} è vuota o privata`);
       for (const id of ids) if (!visti.has(id) && !nascondi.has(id)) visti.set(id, p.slug);
@@ -332,6 +363,9 @@ async function scaricaCatalogoYouTube(produzioni, nascondi) {
     if (v.snippet?.liveBroadcastContent && v.snippet.liveBroadcastContent !== 'none') continue;
     const pubblicato = v.contentDetails?.videoPublishedAt ?? v.snippet?.publishedAt;
     if (!pubblicato || Date.parse(pubblicato) > adesso) continue;   // programmati: non ancora
+    const prod = produzioni.find(x => x.slug === visti.get(v.id));
+    const titoloMin = String(v.snippet?.title ?? '').toLowerCase();
+    if (prod?.escludi?.some(parola => titoloMin.includes(parola))) continue;
     const secondi = secondiISO(v.contentDetails?.duration);
     grezzi.push({
       id: v.id,

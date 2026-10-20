@@ -24,8 +24,14 @@ original: true               # etichetta "G22 Original" sulle card
 descrizione: >
   Due o tre frasi che spiegano di cosa parla il format.
 
+# Playlist (link con "list=") oppure un intero canale (youtube.com/@nome):
+# con il canale ogni nuovo video caricato lì arriva sul sito da solo.
 playlist:
   - https://www.youtube.com/playlist?list=INCOLLA_QUI_LA_PLAYLIST
+
+# Facoltativo: nasconde i video il cui titolo contiene una di queste parole
+# escludi_titoli:
+#   - Trailer
 
 in_evidenza:
   hero: no

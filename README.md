@@ -25,6 +25,9 @@ esposto su internet. È il motivo per cui è sia velocissimo sia molto difficile
 Caricatelo su YouTube **e aggiungetelo alla playlist del format**. Fine. Entro un'ora è sul sito,
 nelle *Ultime uscite* e nel carosello del suo format. Funziona anche con playlist su canali diversi
 (es. Nowtilus sul vostro canale e su quello di Nowtilus): basta elencarle tutte nella scheda del format.
+Al posto di una playlist si può indicare un intero canale (`https://www.youtube.com/@ViteinCorso`):
+il sito prende tutti i video caricati lì, compresi quelli futuri. Con `escludi_titoli` si nascondono
+i video il cui titolo contiene certe parole (es. `Intro`, `Trailer`).
 
 ### Aggiungere un nuovo format
 1. In `contenuti/produzioni/` copiate la cartella `_modello` e rinominatela, es. `storie-di-quartiere`
