@@ -202,11 +202,10 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
   transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0)); transition: transform .5s var(--ease), box-shadow .5s var(--ease); }
 .card--h .thumb { aspect-ratio: 16/9; }
 .thumb img.main { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.001); transition: transform 1.1s var(--ease); }
-/* Sfumatura: nero quasi pieno in basso + sfocatura appena accennata, così il testo già
-   impresso nella miniatura sotto al titolo si attenua e non si sovrappone a quello della card */
+/* Sfumatura: nero quasi pieno in basso, così il testo già impresso nella miniatura
+   sotto al titolo si attenua e non si sovrappone a quello della card */
 .thumb .shade { position: absolute; inset: auto 0 0; height: 62%;
   background: linear-gradient(to top, rgba(0,0,0,.98) 0%, rgba(0,0,0,.92) 32%, rgba(0,0,0,.55) 66%, rgba(0,0,0,0) 100%);
-  backdrop-filter: blur(1.5px); -webkit-backdrop-filter: blur(1.5px);
   -webkit-mask-image: linear-gradient(to top, #000 45%, transparent 92%); mask-image: linear-gradient(to top, #000 45%, transparent 92%);
   transition: height .5s var(--ease); }
 .card--h .thumb .shade { height: 78%; }
@@ -233,9 +232,11 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .card--v:hover .ov p, .card--v:focus-visible .ov p { max-height: 3em; opacity: 1; transition: max-height .5s var(--ease), opacity .4s .1s; }
 /* Uscita (mouse fuori): tutto torna in dissolvenza, più lento e senza scatti.
    Queste sono le transizioni dello stato normale, quindi valgono quando si esce dall'hover. */
-.thumb { transition: transform .9s var(--morbido), box-shadow .9s var(--morbido); }
+.thumb { transition: transform .9s var(--morbido), box-shadow .9s var(--morbido); will-change: transform; backface-visibility: hidden; }
 .thumb::after { transition: box-shadow .8s var(--morbido), opacity .8s var(--morbido); }
-.thumb img.main { transition: transform 1.4s var(--morbido); }
+.thumb img.main { transition: transform 1.4s var(--morbido); will-change: transform; backface-visibility: hidden; }
+/* will-change tiene la card sempre su un livello grafico pronto: il browser non deve
+   ridisegnarla alla fine dell'animazione, quindi niente "scatto" da morbido a nitido. */
 .thumb .play { opacity: 0; transition: transform .6s var(--morbido), opacity .5s var(--morbido); }
 .thumb .shade { transition: height .9s var(--morbido); }
 .card--v .ov p { transition: opacity .35s var(--morbido), max-height .8s var(--morbido) .1s; }
