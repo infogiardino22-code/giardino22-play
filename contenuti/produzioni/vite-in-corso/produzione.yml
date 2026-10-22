@@ -18,6 +18,7 @@ playlist:
 # Video da non mostrare se il titolo contiene una di queste parole
 escludi_titoli:
   - Intro
+  - AGGIORNAMENTI
 
 in_evidenza:
   hero: no
