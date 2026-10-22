@@ -505,7 +505,10 @@ async function generaImmaginiVideo(v, prod) {
   const fileOG = path.join(dir, `${v.id}-og.jpg`);   // anteprima per WhatsApp/LinkedIn/Facebook
   const copertina = prod.copertine[v.id];
   // la copertina personalizzata cambia → rigenera la verticale
-  const firma = (copertina ? sha((await fs.readFile(copertina)).toString('base64')) : (DEMO ? 'demo' : 'yt')) + '-' + prod.ritaglio;
+  // Short senza miniatura verticale: YouTube dà solo quella orizzontale con il video al centro
+  // e ai lati il fotogramma sfocato, quindi si ritaglia sempre al centro.
+  const ritaglio = v.short ? 'centre' : prod.ritaglio;
+  const firma = (copertina ? sha((await fs.readFile(copertina)).toString('base64')) : (DEMO ? 'demo' : 'yt')) + '-' + ritaglio;
   const fileFirma = path.join(dir, `${v.id}.firma`);
   const firmaVecchia = existsSync(fileFirma) ? await fs.readFile(fileFirma, 'utf8') : '';
   if (existsSync(fileH) && existsSync(fileV) && existsSync(fileOG) && firmaVecchia === firma) return;
@@ -539,7 +542,7 @@ async function generaImmaginiVideo(v, prod) {
     // Puntata orizzontale senza copertina verticale: ritaglio 9:16 allineato a sinistra
     // (di solito il titolo nella miniatura parte da sinistra). Si cambia per format
     // con "ritaglio_verticale" nella scheda.
-    const pos = prod.ritaglio === 'attention' ? sharp.strategy.attention : prod.ritaglio;
+    const pos = ritaglio === 'attention' ? sharp.strategy.attention : ritaglio;
     await sharp(orizz).resize(540, 960, { fit: 'cover', position: pos }).webp(WEBP).toFile(fileV);
   }
   await fs.writeFile(fileFirma, firma);
