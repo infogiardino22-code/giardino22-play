@@ -12,9 +12,9 @@ descrizione: >
 # Si possono mettere playlist oppure un intero canale: con il canale
 # ogni nuovo video caricato lì arriva sul sito da solo.
 playlist:
-- https://www.youtube.com/playlist?list=PL_PxjbJTfLZG9xsS4xf50HbrNN4CZyRYo
  
   - PLCTbdoQpEPIQ                          # short (canale Giardino22 Play)
+  - https://www.youtube.com/playlist?list=PL_PxjbJTfLZG9xsS4xf50HbrNN4CZyRYo
 
 # Video da non mostrare se il titolo contiene una di queste parole
 escludi_titoli:
