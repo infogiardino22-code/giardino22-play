@@ -15,8 +15,8 @@ ordine_format: automatico
 # Le 3 slide grandi in cima alla home (al massimo 3, in quest'ordine)
 hero:
   - https://youtu.be/uUvRxN1bOKE        # SONNO ep. 05
+  - https://youtu.be/TDpq9bVCOkY        # Nowtilus – Chi scrive le regole del futuro?
   - https://youtu.be/Whz8k3O_gIw        # Vite in Corso ep. 07
-  - https://youtu.be/DfBWh9VXL7w        # Nowtilus – AI e futuro del lavoro
 
 # Riga "Da non perdere" (formato orizzontale, al massimo 12)
 da_non_perdere:
