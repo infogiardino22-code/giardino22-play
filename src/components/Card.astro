@@ -2,10 +2,12 @@
 // Card video: miniatura pulita (solo etichette), testi sotto l'immagine.
 // Così il titolo non si sovrappone alle scritte già presenti nelle miniature.
 import Icona from './Icona.astro';
-import { perSlug, linkVideo, media, infoVideo, eNuovo, primaRiga } from '../lib/catalogo.js';
+import { perSlug, linkVideo, media, eNuovo, primaRiga } from '../lib/catalogo.js';
 const { v, forma = 'v', mostraFormat = true } = Astro.props;
 const p = perSlug.get(v.produzione);
-const info = infoVideo(v, { compatta: true });
+const MESI = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
+const d = new Date(v.pubblicato);
+const info = [v.episodio ? 'Ep. ' + String(v.episodio).padStart(2, '0') : (v.short ? 'Short' : null), `${d.getUTCDate()} ${MESI[d.getUTCMonth()]}`].filter(Boolean);
 const w = forma === 'v' ? 540 : 960, h = forma === 'v' ? 960 : 540;
 const nuovo = eNuovo(v);
 ---
@@ -24,7 +26,7 @@ const nuovo = eNuovo(v);
   <div class="cap">
     {mostraFormat && <span class="cap__f">{p?.nome}</span>}
     <h3>{v.titolo}</h3>
-    <div class="meta">{info.filter(x => x !== v.durata).map((x, i) => <>{i > 0 && <i></i>}<span>{x}</span></>)}</div>
+    <div class="meta">{info.map((x, i) => <>{i > 0 && <i></i>}<span>{x}</span></>)}</div>
     {forma === 'h' && <p>{primaRiga(v.descrizione, 140)}</p>}
   </div>
 </a>
