@@ -19,7 +19,7 @@ const jsonld = {
 };
 ---
 <Base titolo={p.nome} descrizione={p.descrizione} immagine={media(p.img.heroPiccola)} jsonld={jsonld}>
-  <section class="shero">
+  <section class={`shero f-${p.slug}`}>
     <img src={media(p.img.hero)} srcset={`${media(p.img.heroPiccola)} 960w, ${media(p.img.hero)} 1920w`} sizes="100vw" alt="" width="1920" height="1080" fetchpriority="high" />
     <div class="wrap">
       {p.img.logo && <img class={`slide__logo ${classeLogo(p)}`} src={media(p.img.logo)} alt="" />}
@@ -35,7 +35,7 @@ const jsonld = {
     </div>
   </section>
 
-  <div class="stack">
+  <div class={`stack f-${p.slug}`}>
     {episodi.length > 0 && (
       <section class="wrap reveal eps" aria-labelledby="h-episodi" data-eps>
         <div class="row__head">
@@ -46,6 +46,6 @@ const jsonld = {
         <div class="prog" aria-hidden="true"><span></span></div>
       </section>
     )}
-    <Riga id="clip" sopratitolo="Contenuti brevi" titolo="Clip e Short" video={short} forma="v" mostraFormat={false} />
+    <Riga id="clip" sopratitolo="Contenuti brevi" titolo="Clip e Short" video={short} forma="v" mostraFormat={false} colore={p.slug} />
   </div>
 </Base>

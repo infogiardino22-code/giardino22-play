@@ -24,7 +24,7 @@ const jsonld = {
       {hero.map((v, i) => {
         const p = perSlug.get(v.produzione);
         return (
-          <article class={`slide${i === 0 ? ' on' : ''}`} aria-roledescription="slide" aria-label={`${i + 1} di ${hero.length}`} aria-hidden={i === 0 ? 'false' : 'true'}>
+          <article class={`slide f-${v.produzione} t-${v.id}${i === 0 ? ' on' : ''}`} aria-roledescription="slide" aria-label={`${i + 1} di ${hero.length}`} aria-hidden={i === 0 ? 'false' : 'true'}>
             <div class="slide__bgw">
               <img class="slide__bg" src={media(p.img.hero)} srcset={`${media(p.img.heroPiccola)} 960w, ${media(p.img.hero)} 1920w`} sizes="100vw"
                 alt="" width="1920" height="1080" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'auto'} decoding="async" />
@@ -49,7 +49,7 @@ const jsonld = {
       {hero.length > 1 && (
         <div class="picker wrap" role="tablist" aria-label="Scegli il contenuto in evidenza">
           {hero.map((v, i) => (
-            <button class={`pick${i === 0 ? ' on' : ''}`} type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-i={i}>
+            <button class={`pick f-${v.produzione}${i === 0 ? ' on' : ''}`} type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-i={i}>
               <div><small>{perSlug.get(v.produzione).nome}</small><b>{v.titolo}</b></div>
               <div class="bar"><span></span></div>
             </button>
@@ -59,11 +59,12 @@ const jsonld = {
     </section>
   )}
 
+  {hero.length > 0 && <div class={`bagliore t-${hero[0].id}`} id="bagliore" aria-hidden="true"></div>}
   <main class="stack">
     <Riga id="nuovi" sopratitolo="Ora su Play" titolo="Ultime uscite" video={ultime} forma="v" />
     <Riga id="dnp" sopratitolo="In evidenza" titolo="Da non perdere" video={dnp} forma="h" />
     {produzioni.map(p => (
-      <Riga id={p.slug} sopratitolo={p.categoria} titolo={p.nome} video={videoDi(p.slug)} forma="v" tutti={linkFormat(p.slug)} mostraFormat={false} />
+      <Riga id={p.slug} sopratitolo={p.categoria} titolo={p.nome} video={videoDi(p.slug)} forma="v" tutti={linkFormat(p.slug)} mostraFormat={false} colore={p.slug} />
     ))}
   </main>
 

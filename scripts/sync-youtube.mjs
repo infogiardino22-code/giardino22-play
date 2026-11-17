@@ -222,6 +222,13 @@ async function leggiProduzioni() {
       }
     }
 
+    let colore = null;
+    if (d.colore != null && String(d.colore).trim() !== '') {
+      colore = String(d.colore).trim();
+      if (!/^#[0-9a-f]{6}$/i.test(colore)) { errore(doveF, `colore deve essere un codice esadecimale come "#7C9CFF", non "${d.colore}"`); colore = null; }
+      else colore = colore.toUpperCase();
+    }
+
     const fileHero = await trova(dir, 'hero', ['jpg', 'jpeg', 'png', 'webp']);
     const fileLogo = await trova(dir, 'logo', ['svg', 'png', 'webp']);
     if (!fileHero) avviso(dove, 'manca hero.jpg: userò la miniatura del video più recente');
@@ -249,6 +256,7 @@ async function leggiProduzioni() {
       linkEpisodi,
       escludi,
       ritaglio: RITAGLI[ritaglio] ?? 'left',
+      colore,
       fileHero, fileLogo, copertine,
     });
   }
@@ -550,6 +558,39 @@ async function generaImmaginiVideo(v, prod) {
   await fs.writeFile(fileFirma, firma);
 }
 
+/**
+ * Colore "d'atmosfera" di un'immagine: la tinta più presente tra i pixel vivaci
+ * (si ignorano grigi, neri e bianchi), resa luminosa e satura il giusto per brillare
+ * sul fondo scuro. Restituisce "#RRGGBB" oppure null se l'immagine è quasi tutta grigia.
+ */
+export async function tinta(sorgente) {
+  const { data, info } = await sharp(sorgente).resize(48, 48, { fit: 'cover' }).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+  const pesi = new Float64Array(36);                  // 36 spicchi da 10° di tinta
+  let totale = 0;
+  for (let i = 0; i < data.length; i += info.channels) {
+    const r = data[i] / 255, g = data[i + 1] / 255, b = data[i + 2] / 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b), c = max - min;
+    if (c < .18 || max < .22) continue;               // grigio o troppo scuro
+    let h = max === r ? ((g - b) / c) % 6 : max === g ? (b - r) / c + 2 : (r - g) / c + 4;
+    h = (h * 60 + 360) % 360;
+    const w = c * max;                                 // pesa di più i colori vivi e luminosi
+    pesi[Math.floor(h / 10)] += w; totale += w;
+  }
+  if (totale < 48 * 48 * .02) return null;            // meno del 2% di colore: lascio quello del format
+  let best = 0;
+  for (let i = 0; i < 36; i++) {
+    const v = pesi[i] + .5 * (pesi[(i + 35) % 36] + pesi[(i + 1) % 36]);
+    const vb = pesi[best] + .5 * (pesi[(best + 35) % 36] + pesi[(best + 1) % 36]);
+    if (v > vb) best = i;
+  }
+  return hslHex(best * 10 + 5, .72, .62);
+}
+function hslHex(h, s, l) {
+  const k = n => (n + h / 30) % 12, a = s * Math.min(l, 1 - l);
+  const f = n => Math.round(255 * (l - a * Math.max(-1, Math.min(k(n) - 3, 9 - k(n), 1))));
+  return '#' + [f(0), f(8), f(4)].map(x => x.toString(16).padStart(2, '0')).join('').toUpperCase();
+}
+
 async function generaImmaginiProduzione(p, videoPiuRecente) {
   const dir = path.join(DIR_MEDIA, 'p');
   await fs.mkdir(dir, { recursive: true });
@@ -658,6 +699,7 @@ async function main() {
     v.link = { youtube: `https://www.youtube.com/watch?v=${v.id}`, ...(p.linkEpisodi[v.id] ?? {}) };
     await generaImmaginiVideo(v, p);
     v.img = { h: `v/${v.id}-h.webp`, v: `v/${v.id}-v.webp`, og: `v/${v.id}-og.jpg` };
+    v.tinta = DEMO ? null : await tinta(path.join(DIR_MEDIA, v.img.h)).catch(() => null);
   }
 
   const prodOut = [];
@@ -665,9 +707,11 @@ async function main() {
     const suoi = video.filter(v => v.produzione === p.slug);
     if (suoi.length === 0) avviso(`produzioni/${p.slug}`, 'nessun video pubblico: il format non comparirà');
     const img = await generaImmaginiProduzione(p, suoi[0]);
+    const colore = p.colore ?? (await tinta(path.join(DIR_MEDIA, img.heroPiccola)).catch(() => null)) ?? '#69DFA4';
+    for (const v of suoi) v.tinta ??= colore;          // miniature grigie: prendono il colore del format
     prodOut.push({
       slug: p.slug, nome: p.nome, categoria: p.categoria, descrizione: p.descrizione,
-      ordine: p.ordine, original: p.original, social: p.social, img,
+      ordine: p.ordine, original: p.original, social: p.social, img, colore,
       conteggio: { episodi: suoi.filter(v => !v.short).length, short: suoi.filter(v => v.short).length },
       // data dell'ultima puntata (o dell'ultimo Short, se il format ha solo Short)
       ultimaUscita: (suoi.find(v => !v.short) ?? suoi[0])?.pubblicato ?? '',

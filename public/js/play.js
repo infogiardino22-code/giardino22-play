@@ -185,6 +185,9 @@
         slide[i].classList.add('on'); slide[i].setAttribute('aria-hidden', 'false');
         $$('a', slide[i]).forEach(a => a.removeAttribute('tabindex'));
         if (pick[i]) { void pick[i].offsetWidth; pick[i].classList.add('on'); pick[i].setAttribute('aria-selected', 'true'); }
+        // il bagliore sotto l'hero prende il colore della nuova slide (sfuma da solo via CSS)
+        const bagliore = $('#bagliore'), tinta = [...slide[i].classList].find(c => c.startsWith('t-'));
+        if (bagliore && tinta) bagliore.className = 'bagliore ' + tinta;
         suScroll();
         programma();
       };

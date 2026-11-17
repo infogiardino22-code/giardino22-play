@@ -1,10 +1,10 @@
 ---
 import Card from './Card.astro';
 import Icona from './Icona.astro';
-const { id, sopratitolo, titolo, video, forma = 'v', tutti = null, mostraFormat = true } = Astro.props;
+const { id, sopratitolo, titolo, video, forma = 'v', tutti = null, mostraFormat = true, colore = null } = Astro.props;
 if (!video?.length) return;
 ---
-<section class="row wrap" aria-labelledby={`h-${id}`} data-riga>
+<section class={`row wrap${colore ? ` row--format f-${colore}` : ''}`} aria-labelledby={`h-${id}`} data-riga>
   <div class="row__head">
     <div>
       {sopratitolo && <div class="eyebrow">{sopratitolo}</div>}

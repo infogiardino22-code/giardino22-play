@@ -1,0 +1,42 @@
+# Anteprima di una modifica grafica: genera il sito con i dati veri ma NON lo pubblica.
+# Parte su ogni push a un ramo "anteprima-*"; il sito generato si scarica dagli artifact.
+name: Anteprima (non pubblica)
+
+on:
+  push:
+    branches: ['anteprima-*']
+
+permissions:
+  contents: read
+
+jobs:
+  anteprima:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Recupera immagini
+        uses: actions/cache/restore@v4
+        with:
+          path: public/media
+          key: play-media-${{ github.run_id }}
+          restore-keys: play-media-
+      - name: Sincronizza con YouTube
+        run: npm run sync
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+      - name: Genera il sito
+        run: npm run build
+        env:
+          SITE_URL: https://play.giardino22.it
+          BASE_PATH: /
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sito-anteprima
+          path: dist
+          retention-days: 3

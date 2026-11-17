@@ -37,7 +37,8 @@ const jsonld = {
 const info = infoVideo(v, { data: true });
 ---
 <Base titolo={`${v.titolo} · ${p.nome}`} descrizione={primaRiga(v.descrizione, 160) || v.titolo} immagine={media(v.img.og)} tipo="video.episode" jsonld={jsonld}>
-  <div class="vpage wrap">
+  <div class={`ambiente t-${v.id}`} aria-hidden="true"><img src={media(v.img.h)} alt="" width="960" height="540" /></div>
+  <div class={`vpage wrap f-${p.slug} t-${v.id}`}>
     <a class="back" href={url('')}><Icona nome="sx" /> Torna a Play</a>
     <div class={`watch${v.short ? ' watch--short' : ''}`}>
       <div class="player" data-yt={v.id} data-titolo={v.titolo}>
@@ -79,8 +80,8 @@ const info = infoVideo(v, { data: true });
     </div>
   </div>
   <div class="stack">
-    <Riga id="altri" sopratitolo="Stessa serie" titolo={`Episodi di ${p.nome}`} video={altriEpisodi} forma="h" tutti={linkFormat(p.slug)} mostraFormat={false} />
-    <Riga id="clip" sopratitolo="Contenuti brevi" titolo="Clip e Short" video={clipSerie} forma="v" mostraFormat={false} />
+    <Riga id="altri" sopratitolo="Stessa serie" titolo={`Episodi di ${p.nome}`} video={altriEpisodi} forma="h" tutti={linkFormat(p.slug)} mostraFormat={false} colore={p.slug} />
+    <Riga id="clip" sopratitolo="Contenuti brevi" titolo="Clip e Short" video={clipSerie} forma="v" mostraFormat={false} colore={p.slug} />
     <Riga id="anche" sopratitolo="Dagli altri format" titolo="Guarda anche" video={anche} forma="h" />
   </div>
 </Base>

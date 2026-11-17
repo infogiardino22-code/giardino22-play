@@ -64,6 +64,7 @@ const PRIVACY = import.meta.env.PRIVACY_URL || process.env.PRIVACY_URL || '';
   {fontWoff2 && <link rel="preload" href={url('fonts/ProximaNova-Black.woff2')} as="font" type="font/woff2" crossorigin />}
   {!fontWoff2 && fontOtf && <link rel="preload" href={url('fonts/ProximaNova-Black.otf')} as="font" type="font/otf" crossorigin />}
   <link rel="stylesheet" href={asset('css/play.css')} />
+  <link rel="stylesheet" href={url('css/colori.css')} />
   {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld).replace(/</g, '\\u003c')} />}
   <script is:inline src={asset('js/anim.js')}></script>
   <script is:inline src={asset('js/play.js')} defer></script>

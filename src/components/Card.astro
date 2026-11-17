@@ -9,7 +9,7 @@ const info = infoVideo(v, { compatta: true });
 const w = forma === 'v' ? 540 : 960, h = forma === 'v' ? 960 : 540;
 const nuovo = eNuovo(v);
 ---
-<a class={`card card--${forma}`} href={linkVideo(v)} aria-label={`${v.titolo} · ${p?.nome} · ${v.durata}`}>
+<a class={`card card--${forma} f-${v.produzione} t-${v.id}`} href={linkVideo(v)} aria-label={`${v.titolo} · ${p?.nome} · ${v.durata}`}>
   <div class="thumb">
     <img class="main" src={media(forma === 'v' ? v.img.v : v.img.h)} alt="" width={w} height={h} loading="lazy" decoding="async" />
     <span class="shade"></span>

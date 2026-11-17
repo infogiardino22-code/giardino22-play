@@ -20,6 +20,7 @@ categoria: Categoria breve
 ordine: 10
 attivo: true
 original: true               # etichetta "G22 Original" sulle card
+colore:                      # es. "#7C9CFF": colore del format (vuoto = preso dall'immagine hero)
 
 descrizione: >
   Due o tre frasi che spiegano di cosa parla il format.

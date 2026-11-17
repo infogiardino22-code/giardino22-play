@@ -3,6 +3,7 @@ categoria: Storie e nuovi mondi
 ordine: 3
 attivo: true
 original: false  # produzione esterna: niente etichetta "G22 Original"
+colore: "#3FC8F0"          # colore del format su titoli, etichette e sfumature (vuoto = preso dall'immagine hero)
 
 descrizione: >
   Innovation talk e interviste su futuro del lavoro, tecnologia e ambiente.

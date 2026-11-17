@@ -3,6 +3,7 @@ categoria: Storie vere
 ordine: 2
 attivo: true
 original: true               # etichetta "G22 Original" sulle card
+colore: "#A07BFF"          # colore del format su titoli, etichette e sfumature (vuoto = preso dall'immagine hero)
 
 descrizione: >
   Storie di errori, cambiamento e seconde possibilità, raccontate senza filtri
