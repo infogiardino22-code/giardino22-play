@@ -94,7 +94,9 @@ vi manda una mail con l'elenco dei problemi in italiano (es. *"produzioni/sonno/
 > persone che li gestiscono non sono tecniche.
 
 ### Aggiornare subito, senza aspettare l'ora
-Su GitHub: **Actions → Aggiorna e pubblica Play → Run workflow**.
+Su GitHub: **Actions → Aggiorna e pubblica Play → Run workflow**. Il pulsante lo vede solo chi ha accesso
+in scrittura al repository. Nota: GitHub esegue il controllo programmato "ogni ora" con ritardi anche di
+alcune ore, quindi per un'uscita importante conviene premerlo.
 
 ---
 
@@ -161,9 +163,13 @@ può modificare il repository.
    dal vecchio sito loghi, font e immagini elencati in `contenuti/risorse.yml` e li salva nel repository:
    da lì in poi il sito non dipende più da WordPress.
 5. **Playlist mancanti**: in `vite-in-corso` va aggiunta la playlist con gli episodi lunghi.
-6. **WordPress**: incollate `migrazione/redirect-wordpress.htaccess` nel `.htaccess` di giardino22.it
-   (prima di `# BEGIN WordPress`), cambiate la voce di menu "Play" in `https://play.giardino22.it/`
-   e mettete in bozza le vecchie pagine di Play. Fate prima un backup.
+6. **WordPress** *(fatto il 17/11/2026)*: i redirect 301 dalle vecchie pagine Play stanno nello snippet
+   **"Play: reindirizza le vecchie pagine a play.giardino22.it"** (plugin Code Snippets), al posto del
+   `.htaccess`. Ognuna delle vecchie puntate porta alla stessa puntata sul nuovo sito; quelle non più
+   presenti portano alla pagina del format; `/play/` e `/serie/<format>/` portano alla home e ai format.
+   I link a `/play` nel footer, in home e in Contatti sono stati corretti. Il file
+   `migrazione/redirect-wordpress.htaccess` resta solo come riferimento (alcune sue righe puntano a video
+   non più nelle playlist).
 
 ### Costi
 Tutto gratis: GitHub Pages e GitHub Actions sono gratuiti per i repository pubblici, la YouTube API
