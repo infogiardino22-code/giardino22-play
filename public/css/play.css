@@ -407,8 +407,9 @@ body { background:
 
 /* Hero: la luce della slide (dal colore della miniatura) sale dal basso a sinistra */
 .slide::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: radial-gradient(75% 85% at 8% 100%, color-mix(in srgb, var(--tc) 38%, transparent), transparent 70%);
-  mix-blend-mode: screen; opacity: .9; }
+  background: radial-gradient(75% 85% at 8% 85%, color-mix(in srgb, var(--tc) 38%, transparent), transparent 70%);
+  mix-blend-mode: screen; opacity: .9;
+  -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent 96%); mask-image: linear-gradient(to bottom, #000 50%, transparent 96%); }
 .slide .eyebrow { color: var(--c); }
 .pick.on small { color: var(--c); }
 .pick .bar span { background: linear-gradient(90deg, color-mix(in srgb, var(--c) 70%, #fff), var(--c)); }
@@ -441,7 +442,9 @@ body { background:
 .row--format::before { content: ""; position: absolute; z-index: -1; pointer-events: none;
   inset: -70px calc(50% - 50vw) -60px; background:
     radial-gradient(45% 70% at 12% 20%, color-mix(in srgb, var(--c) 16%, transparent), transparent 70%),
-    radial-gradient(40% 60% at 95% 90%, color-mix(in srgb, var(--c) 8%, transparent), transparent 70%); }
+    radial-gradient(40% 60% at 95% 90%, color-mix(in srgb, var(--c) 8%, transparent), transparent 70%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 70%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 70%, transparent); }
 .stack { isolation: isolate; }
 
 /* Card: al passaggio del mouse il bordo prende il colore del format e l'ombra quello della miniatura */
@@ -451,7 +454,8 @@ body { background:
 
 /* Pagina del format: l'immagine si tinge del colore del format */
 .shero::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: radial-gradient(70% 90% at 0% 100%, color-mix(in srgb, var(--c) 34%, transparent), transparent 70%); mix-blend-mode: screen; }
+  background: radial-gradient(70% 90% at 0% 85%, color-mix(in srgb, var(--c) 34%, transparent), transparent 70%); mix-blend-mode: screen;
+  -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent 95%); mask-image: linear-gradient(to bottom, #000 45%, transparent 95%); }
 .shero .wrap { z-index: 2; }
 .shero .eyebrow { color: var(--c); }
 .socials a:hover { color: var(--c); }
