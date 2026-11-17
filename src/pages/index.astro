@@ -64,7 +64,9 @@ const jsonld = {
     <Riga id="nuovi" sopratitolo="Ora su Play" titolo="Ultime uscite" video={ultime} forma="v" />
     <Riga id="dnp" sopratitolo="In evidenza" titolo="Da non perdere" video={dnp} forma="h" />
     {produzioni.map(p => (
-      <Riga id={p.slug} sopratitolo={p.categoria} titolo={p.nome} video={videoDi(p.slug)} forma="v" tutti={linkFormat(p.slug)} mostraFormat={false} colore={p.slug} />
+      <Riga id={p.slug} sopratitolo={p.categoria} titolo={p.nome} video={videoDi(p.slug)} forma="v" tutti={linkFormat(p.slug)} mostraFormat={false} colore={p.slug}
+        logo={p.img.logo ? media(p.img.logo) : null}
+        conteggio={[p.conteggio.episodi && `${p.conteggio.episodi} ${p.conteggio.episodi === 1 ? 'episodio' : 'episodi'}`, p.conteggio.short && `${p.conteggio.short} clip`].filter(Boolean).join(' · ')} />
     ))}
   </main>
 

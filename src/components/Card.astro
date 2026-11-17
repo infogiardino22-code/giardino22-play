@@ -1,6 +1,6 @@
 ---
-// Card video: testo sopra la miniatura, su una sfumatura scura con leggera sfocatura
-// (così il testo già presente nella miniatura non si mescola con il titolo).
+// Card video: miniatura pulita (solo etichette), testi sotto l'immagine.
+// Così il titolo non si sovrappone alle scritte già presenti nelle miniature.
 import Icona from './Icona.astro';
 import { perSlug, linkVideo, media, infoVideo, eNuovo, primaRiga } from '../lib/catalogo.js';
 const { v, forma = 'v', mostraFormat = true } = Astro.props;
@@ -12,19 +12,19 @@ const nuovo = eNuovo(v);
 <a class={`card card--${forma} f-${v.produzione} t-${v.id}`} href={linkVideo(v)} aria-label={`${v.titolo} · ${p?.nome} · ${v.durata}`}>
   <div class="thumb">
     <img class="main" src={media(forma === 'v' ? v.img.v : v.img.h)} alt="" width={w} height={h} loading="lazy" decoding="async" />
-    <span class="shade"></span>
     {(p?.original || nuovo) && (
       <div class="tags">
-        {p?.original && <span class="tag">G22 Original</span>}
         {nuovo && <span class="tag tag--new">Nuovo</span>}
+        {p?.original && <span class="tag">G22 Original</span>}
       </div>
     )}
+    <span class="dur">{v.durata}</span>
     <span class="play" aria-hidden="true"><Icona nome="play" /></span>
-    <div class="ov">
-      {mostraFormat && <span class="eyebrow">{p?.nome}</span>}
-      <h3>{v.titolo}</h3>
-      <div class="meta">{info.map((x, i) => <>{i > 0 && <i></i>}<span>{x}</span></>)}</div>
-      <p>{primaRiga(v.descrizione, 140)}</p>
-    </div>
+  </div>
+  <div class="cap">
+    {mostraFormat && <span class="cap__f">{p?.nome}</span>}
+    <h3>{v.titolo}</h3>
+    <div class="meta">{info.filter(x => x !== v.durata).map((x, i) => <>{i > 0 && <i></i>}<span>{x}</span></>)}</div>
+    {forma === 'h' && <p>{primaRiga(v.descrizione, 140)}</p>}
   </div>
 </a>
