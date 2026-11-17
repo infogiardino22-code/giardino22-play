@@ -59,11 +59,10 @@ Due livelli, dal più automatico al più preciso:
 Se lasciate tutto vuoto, il sito riempie la vetrina da solo con le ultime uscite.
 
 ### Miniature e formato verticale
-Come sul sito attuale, titolo, format, stagione, episodio e durata stanno sopra l'immagine, nella parte
-bassa, su una sfumatura scura con una leggera sfocatura: il testo già impresso nella miniatura, in quella
-zona, si perde e non si mescola con il titolo della card. In alto a sinistra le etichette
-"G22 Original" (si toglie con `original: false` nella scheda del format) e "Nuovo" (uscito da meno di
-7 giorni). Per l'immagine verticale il sito sceglie, in ordine:
+Le miniature restano pulite: sopra ci sono solo le etichette "Nuovo" (uscito da meno di 7 giorni) e
+"G22 Original" (si toglie con `original: false` nella scheda del format) e la durata. Format, titolo,
+episodio e data stanno **sotto** l'immagine, così non si mescolano con le scritte già impresse nelle
+miniature. Per l'immagine verticale il sito sceglie, in ordine:
 1. la vostra copertina in `copertine/ID.jpg`, se c'è;
 2. per gli Short, la miniatura verticale nativa di YouTube (1080×1920);
 3. altrimenti ritaglia la miniatura orizzontale **allineandola a sinistra**, dove di solito inizia il
@@ -75,6 +74,17 @@ il sito controlla se YouTube ha la miniatura verticale nativa del video.
 
 Per i video lunghi importanti conviene caricare la copertina verticale (le avete già, sono le
 `*_VERTICALE*` del vecchio sito).
+
+### Colori
+Ogni format ha un suo colore (campo `colore:` nella scheda, es. `"#FFD23F"` per SONNO): lo usano le
+etichette delle card, il titolo dei caroselli e la luce dietro di essi, la testata della pagina del
+format. Se il campo è vuoto il colore viene preso dall'immagine `hero`. Ogni video ha inoltre una
+"tinta" calcolata dalla sua miniatura a ogni pubblicazione: colora il bagliore sotto le slide in alto,
+l'ombra delle card e la luce d'ambiente nella pagina del video. Tutto finisce in `/css/colori.css`.
+
+### Anteprima di una modifica grafica
+Un ramo che inizia con `anteprima-` genera il sito con i dati veri **senza pubblicarlo** e lo salva
+sul ramo `anteprima-sito`, da cui si può aprire in locale.
 
 ### Titoli
 Sul sito il titolo YouTube viene ripulito dai pezzi già mostrati altrove: *"I disturbi del sonno da
