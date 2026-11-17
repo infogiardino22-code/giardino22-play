@@ -7,7 +7,7 @@ on:
     branches: ['anteprima-*']
 
 permissions:
-  contents: read
+  contents: write   # solo per salvare il sito di prova sul ramo "anteprima-sito"
 
 jobs:
   anteprima:
@@ -35,8 +35,11 @@ jobs:
         env:
           SITE_URL: https://play.giardino22.it
           BASE_PATH: /
-      - uses: actions/upload-artifact@v4
-        with:
-          name: sito-anteprima
-          path: dist
-          retention-days: 3
+      - name: Salva il sito di prova sul ramo anteprima-sito
+        run: |
+          cd dist
+          git init -q -b anteprima-sito
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A && git commit -qm "Anteprima di ${GITHUB_SHA::7}"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" anteprima-sito
