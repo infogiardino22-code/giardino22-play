@@ -7,6 +7,11 @@
 #  il sito lo riempie da solo con le ultime uscite.
 # ─────────────────────────────────────────────────────────────
 
+# Ordine dei caroselli dei format in home:
+#   automatico → sale in cima il format con la puntata uscita più di recente
+#   manuale    → si usa il numero "ordine" scritto in ogni scheda del format
+ordine_format: automatico
+
 # Le 3 slide grandi in cima alla home (al massimo 3, in quest'ordine)
 hero:
   - https://youtu.be/uUvRxN1bOKE        # SONNO ep. 05

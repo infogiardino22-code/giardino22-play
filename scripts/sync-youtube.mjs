@@ -260,9 +260,9 @@ async function leggiProduzioni() {
 
 async function leggiVetrina() {
   const file = path.join(DIR_CONTENUTI, 'vetrina.yml');
-  if (!existsSync(file)) return { hero: [], dnp: [], nascondi: new Set() };
+  if (!existsSync(file)) return { hero: [], dnp: [], nascondi: new Set(), ordineFormat: 'automatico' };
   let d;
-  try { d = (await leggiYaml(file)) ?? {}; } catch (e) { errore('vetrina.yml', `non riesco a leggerlo (${e.message.split('\n')[0]})`); return { hero: [], dnp: [], nascondi: new Set() }; }
+  try { d = (await leggiYaml(file)) ?? {}; } catch (e) { errore('vetrina.yml', `non riesco a leggerlo (${e.message.split('\n')[0]})`); return { hero: [], dnp: [], nascondi: new Set(), ordineFormat: 'automatico' }; }
   const lista = (chiave) => (d[chiave] ?? []).map(x => {
     const id = idVideo(x);
     if (!id) errore('vetrina.yml', `${chiave}: "${x}" non è un video YouTube`);
@@ -270,7 +270,9 @@ async function leggiVetrina() {
   }).filter(Boolean);
   const hero = lista('hero');
   if (hero.length > MAX_HERO) avviso('vetrina.yml', `hero: ne uso solo i primi ${MAX_HERO}`);
-  return { hero: hero.slice(0, MAX_HERO), dnp: lista('da_non_perdere').slice(0, MAX_DNP), nascondi: new Set(lista('nascondi')) };
+  const ordineFormat = String(d.ordine_format ?? 'automatico').trim().toLowerCase();
+  if (!['automatico', 'manuale'].includes(ordineFormat)) errore('vetrina.yml', `ordine_format deve essere "automatico" o "manuale", non "${d.ordine_format}"`);
+  return { hero: hero.slice(0, MAX_HERO), dnp: lista('da_non_perdere').slice(0, MAX_DNP), nascondi: new Set(lista('nascondi')), ordineFormat };
 }
 
 /* ─────────────────────────── 2. YouTube ─────────────────────────── */
@@ -667,7 +669,14 @@ async function main() {
       slug: p.slug, nome: p.nome, categoria: p.categoria, descrizione: p.descrizione,
       ordine: p.ordine, original: p.original, social: p.social, img,
       conteggio: { episodi: suoi.filter(v => !v.short).length, short: suoi.filter(v => v.short).length },
+      // data dell'ultima puntata (o dell'ultimo Short, se il format ha solo Short)
+      ultimaUscita: (suoi.find(v => !v.short) ?? suoi[0])?.pubblicato ?? '',
     });
+  }
+  // Ordine dei caroselli in home: con "automatico" sale in cima il format con la puntata
+  // più recente; a parità (o con "manuale") decide il campo "ordine" delle schede.
+  if (scelte.ordineFormat === 'automatico') {
+    prodOut.sort((a, b) => b.ultimaUscita.localeCompare(a.ultimaUscita) || a.ordine - b.ordine);
   }
   if (errori.length) return chiudi(t0, null);
 

@@ -41,7 +41,9 @@ i video il cui titolo contiene certe parole (es. `Intro`, `Trailer`).
    | `copertine/ID.jpg` | *(facoltativo)* copertina verticale 9:16 di un video lungo | es. `copertine/uUvRxN1bOKE.jpg` |
 4. Salvate (commit). Il sito si aggiorna in un paio di minuti.
 
-Il nuovo carosello compare in home nella posizione indicata da `ordine`.
+In home i caroselli dei format si ordinano da soli: in cima va il format con la puntata uscita più di recente
+(gli Short non contano, così un format che pubblica solo clip non scavalca le puntate nuove).
+Per tornare all'ordine fisso del campo `ordine` scrivete `ordine_format: manuale` in `contenuti/vetrina.yml`.
 Le icone social compaiono **solo** per i campi compilati.
 
 ### Scegliere cosa va in vetrina
