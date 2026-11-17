@@ -523,3 +523,39 @@ body { background:
 .player { border-radius: 12px; }
 .eps__nav, .next, .next img { border-radius: var(--r); }
 .prog, .prog span, .pick .bar, .pick .bar span { border-radius: 2px; }
+
+/* ==========================================================================
+   Schermi grandi (27" 2K, iMac, monitor esterni): si usa più larghezza,
+   più card per riga e testi un po' più grandi, invece di una colonna stretta al centro.
+   ========================================================================== */
+@media (min-width: 1800px) {
+  :root { --maxw: 1640px; --gap: 18px; }
+  body { font-size: 17px; }
+  .track { --n: 6; }
+  .track--h { --n: 4; }
+  .grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .slide__inner { max-width: 700px; }
+  .slide__title { font-size: 62px; }
+  .slide p { font-size: 18px; }
+  .row__head h2 { font-size: 30px; }
+  .cap h3 { font-size: 16px; }
+  .card--h .cap h3 { font-size: 18px; }
+  .cap p { font-size: 14px; }
+  .nav { font-size: 16px; }
+  .shero h1 { font-size: 92px; }
+  .shero p { font-size: 18px; }
+  .info h1 { font-size: 46px; }
+  .desc { font-size: 17px; }
+}
+@media (min-width: 2300px) {
+  :root { --maxw: 2040px; --gap: 20px; }
+  .track { --n: 7; }
+  .track--h { --n: 4; }
+  .grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+  .slide__title { font-size: 70px; }
+  .row__head h2 { font-size: 32px; }
+  .cap h3 { font-size: 17px; }
+  .card--h .cap h3 { font-size: 20px; }
+  .hero { height: clamp(560px, 78svh, 1000px); }
+  .watch:not(.watch--short) { max-width: 1640px; }
+}
