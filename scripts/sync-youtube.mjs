@@ -397,6 +397,7 @@ async function scaricaCatalogoYouTube(produzioni, nascondi) {
       pubblicato,
       secondi,
       canale: v.snippet.channelTitle,
+      tag: Array.isArray(v.snippet.tags) ? v.snippet.tags.slice(0, 15) : [],
     });
   }
   // rilevamento Short, 6 richieste alla volta
@@ -460,7 +461,9 @@ function normalizza(g, nomeFormat) {
     produzione: g.produzione,
     titolo: titoloVetrina(g.titolo, nomeFormat),
     titoloOriginale: pulisciTitolo(g.titolo),
-    descrizione: String(g.descrizione ?? '').replace(/\r/g, '').slice(0, 2000).trim(),
+    descrizione: String(g.descrizione ?? '').replace(/\r/g, '').slice(0, 5000).trim(),
+    // parole chiave per Google e per i motori AI (dai tag YouTube, senza hashtag e doppioni)
+    tag: [...new Set((g.tag ?? []).map(t => String(t).replace(/^#/, '').trim()).filter(t => t && t.length <= 40))].slice(0, 12),
     pubblicato: new Date(g.pubblicato).toISOString(),
     secondi: g.secondi,
     durata: durataTesto(g.secondi),

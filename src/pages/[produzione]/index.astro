@@ -3,7 +3,8 @@ import Base from '../../layouts/Base.astro';
 import Card from '../../components/Card.astro';
 import Riga from '../../components/Riga.astro';
 import Icona from '../../components/Icona.astro';
-import { produzioni, episodiDi, videoDi, linkVideo, media, url, ETICHETTE , classeLogo } from '../../lib/catalogo.js';
+import { produzioni, episodiDi, videoDi, linkVideo, media, url, primaRiga, ETICHETTE , classeLogo } from '../../lib/catalogo.js';
+import { organizzazione, briciole, SITO } from '../../lib/seo.js';
 
 export function getStaticPaths() {
   return produzioni.map(p => ({ params: { produzione: p.slug }, props: { p } }));
@@ -13,9 +14,25 @@ const episodi = episodiDi(p.slug);
 const short = videoDi(p.slug).filter(v => v.short);
 const social = Object.entries(p.social);
 const primo = episodi[0];
+const urlFormat = new URL(url(p.slug + '/'), Astro.site).href;
 const jsonld = {
-  '@context': 'https://schema.org', '@type': 'CreativeWorkSeries', name: p.nome, description: p.descrizione,
-  url: new URL(url(p.slug + '/'), Astro.site).href, image: new URL(media(p.img.hero), Astro.site).href,
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CreativeWorkSeries', '@id': urlFormat + '#serie', name: p.nome, description: p.descrizione,
+      url: urlFormat, image: new URL(media(p.img.hero), Astro.site).href, inLanguage: 'it-IT',
+      genre: p.categoria || undefined,
+      publisher: { '@id': `${SITO}/#organizzazione` }, creator: { '@id': `${SITO}/#organizzazione` },
+      sameAs: Object.values(p.social || {}).filter(Boolean),
+      hasPart: videoDi(p.slug).slice(0, 40).map(v => ({
+        '@type': 'VideoObject', name: v.titoloOriginale, url: new URL(linkVideo(v), Astro.site).href,
+        thumbnailUrl: new URL(media(v.img.h), Astro.site).href, uploadDate: v.pubblicato, duration: `PT${v.secondi}S`,
+        description: primaRiga(v.descrizione, 200) || v.titolo,
+      })),
+    },
+    briciole([['Giardino22 Play', '/'], [p.nome, '/' + p.slug + '/']], Astro.site),
+    organizzazione(Astro.site),
+  ],
 };
 ---
 <Base titolo={p.nome} descrizione={p.descrizione} immagine={media(p.img.heroPiccola)} jsonld={jsonld}>

@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Riga from '../components/Riga.astro';
 import Icona from '../components/Icona.astro';
+import { organizzazione, sitoPlay } from '../lib/seo.js';
 import { produzioni, video, perId, perSlug, heroIds, dnpIds, videoDi, linkVideo, linkFormat, media, url, infoVideo, eNuovo, primaRiga , classeLogo } from '../lib/catalogo.js';
 
 const hero = heroIds.map(id => perId.get(id)).filter(Boolean);
@@ -12,8 +13,17 @@ const parole = (t) => String(t).split(/\s+/).filter(Boolean);
 const NASTRO = ['Serie originali', 'Podcast', 'Videopodcast', 'Interviste', 'Storie vere', 'Clip e short', 'Nuovi format'];
 
 const jsonld = {
-  '@context': 'https://schema.org', '@type': 'WebSite', name: 'Giardino22 Play',
-  url: new URL(url(''), Astro.site).href, publisher: { '@type': 'Organization', name: 'Giardino22 Art Lab S.r.l.', url: 'https://www.giardino22.it' },
+  '@context': 'https://schema.org',
+  '@graph': [
+    sitoPlay(Astro.site),
+    organizzazione(Astro.site),
+    {
+      '@type': 'ItemList', name: 'Format di Giardino22 Play',
+      itemListElement: produzioni.map((p, i) => ({
+        '@type': 'ListItem', position: i + 1, url: new URL(linkFormat(p.slug), Astro.site).href, name: p.nome,
+      })),
+    },
+  ],
 };
 ---
 <Base immagine={hero[0] ? media(hero[0].img.og) : null} jsonld={jsonld}>

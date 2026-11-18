@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Riga from '../../components/Riga.astro';
 import Icona from '../../components/Icona.astro';
+import { organizzazione, briciole, SITO } from '../../lib/seo.js';
 import { video, perSlug, episodiDi, videoDi, linkVideo, linkFormat, media, url, infoVideo, eNuovo, primaRiga, paragrafi, ETICHETTE } from '../../lib/catalogo.js';
 
 export function getStaticPaths() {
@@ -24,15 +25,28 @@ const clipSerie = videoDi(p.slug).filter(x => x.short && x.id !== v.id);
 const anche = video.filter(x => x.produzione !== v.produzione && !x.short).slice(0, 10);
 
 const indirizzo = new URL(linkVideo(v), Astro.site).href;
+const urlFormat = new URL(linkFormat(p.slug), Astro.site).href;
 const jsonld = {
-  '@context': 'https://schema.org', '@type': 'VideoObject',
-  name: v.titoloOriginale, description: primaRiga(v.descrizione, 300) || v.titolo,
-  thumbnailUrl: [new URL(media(v.img.og), Astro.site).href],
-  uploadDate: v.pubblicato, duration: `PT${v.secondi}S`,
-  embedUrl: `https://www.youtube-nocookie.com/embed/${v.id}`,
-  url: indirizzo,
-  partOfSeries: { '@type': 'CreativeWorkSeries', name: p.nome, url: new URL(linkFormat(p.slug), Astro.site).href },
-  publisher: { '@type': 'Organization', name: 'Giardino22', url: 'https://www.giardino22.it' },
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'VideoObject', '@id': indirizzo + '#video',
+      name: v.titoloOriginale, description: primaRiga(v.descrizione, 300) || v.titolo,
+      thumbnailUrl: [new URL(media(v.img.og), Astro.site).href, new URL(media(v.img.h), Astro.site).href],
+      uploadDate: v.pubblicato, duration: `PT${v.secondi}S`,
+      embedUrl: `https://www.youtube-nocookie.com/embed/${v.id}`,
+      contentUrl: `https://www.youtube.com/watch?v=${v.id}`,
+      url: indirizzo, mainEntityOfPage: indirizzo, inLanguage: 'it-IT', isFamilyFriendly: true,
+      genre: p.categoria || undefined,
+      keywords: (v.tag && v.tag.length) ? v.tag.join(', ') : undefined,
+      partOfSeries: { '@type': 'CreativeWorkSeries', '@id': urlFormat + '#serie', name: p.nome, url: urlFormat },
+      publisher: { '@id': `${SITO}/#organizzazione` },
+      creator: { '@id': `${SITO}/#organizzazione` },
+      isPartOf: { '@id': new URL('/#sito', Astro.site).href },
+    },
+    briciole([['Giardino22 Play', '/'], [p.nome, linkFormat(p.slug)], [v.titolo, linkVideo(v)]], Astro.site),
+    organizzazione(Astro.site),
+  ],
 };
 const info = infoVideo(v, { data: true });
 ---
@@ -55,7 +69,7 @@ const info = infoVideo(v, { data: true });
         </div>
         <div class="grid2">
           <div class="desc">
-            {paragrafi(v.descrizione).map(par => (
+            {paragrafi(v.descrizione.slice(0, 2000)).map(par => (
               <p>{par.map(pz => pz.link ? <a href={pz.link} rel="noopener nofollow ugc" target="_blank">{pz.link.replace(/^https:\/\/(www\.)?/, '').slice(0, 48)}</a> : pz.testo)}</p>
             ))}
           </div>
