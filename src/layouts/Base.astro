@@ -35,6 +35,8 @@ const PLAY_SOCIAL = {
 // finché non si preme play su un video (youtube-nocookie.com).
 const PRIVACY = import.meta.env.PRIVACY_URL || process.env.PRIVACY_URL || 'https://www.giardino22.it/privacy-policy/';
 const COOKIE = url('cookie/');
+// Statistiche di Play: attive solo quando è impostato l'indirizzo del servizio (variabile ANALYTICS_URL)
+const STATS = (import.meta.env.ANALYTICS_URL || process.env.ANALYTICS_URL || '').replace(/\/$/, '');
 ---
 <!doctype html>
 <html lang="it">
@@ -125,7 +127,7 @@ const COOKIE = url('cookie/');
       <p><a href="mailto:hello@giardino22.it">hello@giardino22.it</a><br /><a href="tel:+390222198530">+39 02 2219 8530</a></p>
     </div>
     <div class="copy">
-      <span>© {new Date().getFullYear()} Giardino22 Art Lab S.r.l. · P. IVA 02824270181 · <a href={PRIVACY}>Privacy Policy</a> · <a href={COOKIE}>Cookie</a></span>
+      <span>© {new Date().getFullYear()} Giardino22 Art Lab S.r.l. · P. IVA 02824270181 · <a href={PRIVACY}>Privacy Policy</a> · <a href={COOKIE}>Cookie</a> · <button class="linkbtn" type="button" data-consenso="apri">Gestisci cookie</button></span>
       <span>
         <a href="https://www.instagram.com/giardino22artlab/" rel="noopener" target="_blank">Instagram</a> ·
         <a href="https://it.linkedin.com/company/giardino22" rel="noopener" target="_blank">LinkedIn</a> ·
@@ -134,6 +136,21 @@ const COOKIE = url('cookie/');
     </div>
    </div>
   </footer>
+  <div class="consenso" id="consenso" role="dialog" aria-labelledby="consenso-t" aria-describedby="consenso-d" data-stats={STATS || null} hidden>
+    <button class="consenso__x" type="button" data-consenso="rifiuta" aria-label="Chiudi: rifiuta i cookie non necessari">&times;</button>
+    <h2 id="consenso-t">Cookie e contenuti esterni</h2>
+    <p id="consenso-d">Play non usa cookie propri. Con il tuo consenso carichiamo i video da YouTube (Google), che può usare cookie{STATS && ', e contiamo visite e clic in forma anonima per migliorare il portale'}. Puoi cambiare idea quando vuoi da "Gestisci cookie" in fondo alla pagina. <a href={COOKIE}>Informativa</a></p>
+    <div class="consenso__pref" id="consenso-pref" hidden>
+      <label><input type="checkbox" checked disabled /> <span><b>Necessari</b>Ricordano solo la scelta che fai qui.</span></label>
+      {STATS && <label><input type="checkbox" name="stats" /> <span><b>Statistiche</b>Visite e clic in forma anonima, senza cookie.</span></label>}
+      <label><input type="checkbox" name="youtube" /> <span><b>Video di YouTube</b>Il player di Google, che può usare cookie.</span></label>
+    </div>
+    <div class="consenso__btn">
+      <button class="btn btn--pari" type="button" data-consenso="rifiuta">Rifiuta</button>
+      <button class="btn btn--pari" type="button" data-consenso="accetta">Accetta tutto</button>
+      <button class="consenso__pers" type="button" data-consenso="personalizza" aria-controls="consenso-pref" aria-expanded="false">Personalizza</button>
+    </div>
+  </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

@@ -210,12 +210,52 @@
       programma();
     }
 
-    /* Player: YouTube si carica SOLO dopo il clic (privacy + velocità) */
+    /* Consenso: banner di Play (nessun plugin). La scelta resta 6 mesi sul dispositivo.
+       YouTube e statistiche partono solo con il consenso. */
+    const CHIAVE = 'g22-consenso', SEI_MESI = 182 * 864e5;
+    const banner = $('#consenso');
+    const conStats = !!(banner && banner.dataset.stats);
+    const leggi = () => {
+      try { const c = JSON.parse(localStorage.getItem(CHIAVE)); if (c && c.v === 1 && Date.now() - c.t < SEI_MESI) return c; } catch (e) {}
+      return null;
+    };
+    const salva = (c) => {
+      const val = { v: 1, t: Date.now(), youtube: !!c.youtube, stats: conStats && !!c.stats };
+      try { localStorage.setItem(CHIAVE, JSON.stringify(val)); } catch (e) {}
+      dispatchEvent(new CustomEvent('g22:consenso', { detail: val }));
+      return val;
+    };
+    window.g22Consenso = () => leggi() || { youtube: false, stats: false };
+    if (banner) {
+      const pref = $('#consenso-pref'), pers = $('[data-consenso="personalizza"]', banner);
+      const box = (n) => $(`input[name="${n}"]`, banner);
+      const apri = () => {
+        const c = window.g22Consenso();
+        if (box('youtube')) box('youtube').checked = !!c.youtube;
+        if (box('stats')) box('stats').checked = !!c.stats;
+        banner.hidden = false; requestAnimationFrame(() => banner.classList.add('on'));
+      };
+      const chiudi = () => { banner.classList.remove('on'); setTimeout(() => { banner.hidden = true; }, 300); };
+      banner.addEventListener('click', (e) => {
+        const b = e.target.closest('[data-consenso]'); if (!b) return;
+        const a = b.dataset.consenso;
+        if (a === 'accetta') { salva({ youtube: true, stats: true }); chiudi(); }
+        else if (a === 'rifiuta') { salva({ youtube: false, stats: false }); chiudi(); }
+        else if (a === 'personalizza') {
+          if (pref.hidden) { pref.hidden = false; pers.textContent = 'Salva le scelte'; pers.setAttribute('aria-expanded', 'true'); }
+          else { salva({ youtube: box('youtube') && box('youtube').checked, stats: box('stats') && box('stats').checked }); chiudi(); }
+        }
+      });
+      document.addEventListener('click', (e) => { if (e.target.closest('[data-consenso="apri"]')) { e.preventDefault(); pref.hidden = false; pers.textContent = 'Salva le scelte'; pers.setAttribute('aria-expanded', 'true'); apri(); } });
+      if (!leggi()) apri();
+    }
+
+    /* Player: YouTube si carica SOLO dopo il clic e con il consenso (privacy + velocità) */
     $$('.player[data-yt]').forEach(player => {
       const id = player.dataset.yt;
       if (!/^[A-Za-z0-9_-]{11}$/.test(id)) return;
       const btn = $('.go', player);
-      if (btn) btn.addEventListener('click', () => {
+      const carica = () => {
         const f = document.createElement('iframe');
         f.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1`;
         f.title = player.dataset.titolo || 'Video';
@@ -224,6 +264,25 @@
         f.referrerPolicy = 'strict-origin-when-cross-origin';
         player.replaceChildren(f);
         f.focus();
+      };
+      if (btn) btn.addEventListener('click', () => {
+        if (window.g22Consenso().youtube) return carica();
+        if ($('.player__ask', player)) return;
+        const ask = document.createElement('div');
+        ask.className = 'player__ask';
+        ask.setAttribute('role', 'group');
+        ask.setAttribute('aria-label', 'Consenso per il video');
+        const p = document.createElement('p');
+        p.textContent = 'Il video è su YouTube (Google), che può usare cookie. Vuoi caricarlo qui?';
+        const si = document.createElement('button');
+        si.type = 'button'; si.className = 'btn btn--main'; si.textContent = 'Accetta e guarda';
+        si.addEventListener('click', () => { salva(Object.assign({}, window.g22Consenso(), { youtube: true })); carica(); });
+        const yt = document.createElement('a');
+        yt.className = 'btn'; yt.href = `https://www.youtube.com/watch?v=${id}`; yt.target = '_blank'; yt.rel = 'noopener';
+        yt.textContent = 'Apri su YouTube';
+        ask.append(p, si, yt);
+        player.append(ask);
+        si.focus();
       });
     });
 

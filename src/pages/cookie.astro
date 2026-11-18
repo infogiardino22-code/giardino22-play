@@ -4,6 +4,7 @@
 import Base from '../layouts/Base.astro';
 import { url } from '../lib/catalogo.js';
 const AGGIORNATA = '18 novembre 2026';
+const STATS = import.meta.env.ANALYTICS_URL || process.env.ANALYTICS_URL || '';
 ---
 <Base titolo="Cookie e privacy su Play" descrizione="Come Giardino22 Play tratta cookie e video YouTube.">
   <article class="vpage wrap legale">
@@ -13,16 +14,22 @@ const AGGIORNATA = '18 novembre 2026';
 
     <h2>In breve</h2>
     <p>
-      Giardino22 Play (<strong>play.giardino22.it</strong>) <strong>non usa cookie</strong>: né propri, né di
-      statistica, né di profilazione. Non salva informazioni sul tuo dispositivo e, finché non avvii un video,
-      non si collega a servizi esterni: immagini, caratteri e codice arrivano solo da questo sito.
-      Per questo non ti mostriamo un banner dei cookie.
+      Giardino22 Play (<strong>play.giardino22.it</strong>) <strong>non usa cookie propri</strong> né di profilazione.
+      Finché non dai il consenso non si collega a servizi esterni: immagini, caratteri e codice arrivano solo da questo sito.
+      Alla prima visita un banner ti chiede se vuoi attivare i <strong>video di YouTube</strong>{STATS && <> e le <strong>statistiche anonime</strong></>}.
+      Puoi accettare, rifiutare o scegliere voce per voce. Chiudere il banner con la X equivale a rifiutare.
+    </p>
+    <p>
+      La tua scelta viene salvata solo sul tuo dispositivo (memoria locale del browser, strettamente necessaria) per 6 mesi.
+      Puoi cambiarla quando vuoi: <button class="linkbtn" type="button" data-consenso="apri">Gestisci cookie</button>
+      (il link è anche in fondo a ogni pagina).
     </p>
 
     <h2>Video di YouTube</h2>
     <p>
       I video sono ospitati su YouTube, servizio di Google Ireland Limited. Il player <strong>si carica solo quando
-      premi play</strong>: è il tuo clic ad attivarlo, e vicino al pulsante te lo ricordiamo ogni volta.
+      premi play e solo se hai dato il consenso</strong>; se non l'hai dato, premendo play ti chiediamo se vuoi caricarlo
+      ("Accetta e guarda") oppure aprirlo direttamente su YouTube.
       Usiamo la modalità a privacy avanzata (<code>youtube-nocookie.com</code>), ma una volta avviato il video
       YouTube può salvare cookie o altri identificatori sul tuo dispositivo e trattare dati come l'indirizzo IP,
       secondo le proprie regole:
@@ -32,9 +39,19 @@ const AGGIORNATA = '18 novembre 2026';
       <li><a href="https://policies.google.com/technologies/cookies?hl=it" rel="noopener" target="_blank">Come Google usa i cookie</a></li>
     </ul>
     <p>
-      Se non vuoi, non avviare il video: puoi comunque leggere titoli, descrizioni e informazioni di ogni puntata.
-      Puoi anche guardarlo direttamente sul canale YouTube indicato nella pagina.
+      Se rifiuti, puoi comunque leggere titoli, descrizioni e informazioni di ogni puntata, e guardare il video
+      direttamente su YouTube.
     </p>
+
+    {STATS && <>
+      <h2>Statistiche anonime</h2>
+      <p>
+        Solo se le accetti, contiamo le pagine viste e i clic (per esempio quali video vengono avviati e da quale sezione),
+        per capire cosa interessa di più e migliorare il portale. Non usiamo cookie, non salviamo il tuo indirizzo IP e
+        non possiamo riconoscerti né seguirti da un giorno all'altro. I dati restano su un servizio gestito da noi e non
+        vengono ceduti a nessuno.
+      </p>
+    </>}
 
     <h2>Link ad altri siti</h2>
     <p>
