@@ -461,7 +461,10 @@ function normalizza(g, nomeFormat) {
     produzione: g.produzione,
     titolo: titoloVetrina(g.titolo, nomeFormat),
     titoloOriginale: pulisciTitolo(g.titolo),
-    descrizione: String(g.descrizione ?? '').replace(/\r/g, '').slice(0, 5000).trim(),
+    // le righe "Guarda … su Giardino22 PLAY: https://play.giardino22.it/…" servono su YouTube, non sul sito
+    descrizione: String(g.descrizione ?? '').replace(/\r/g, '')
+      .split('\n').filter(r => !/play\.giardino22\.it/i.test(r)).join('\n')
+      .replace(/\n{3,}/g, '\n\n').slice(0, 5000).trim(),
     // parole chiave per Google e per i motori AI (dai tag YouTube, senza hashtag e doppioni)
     tag: [...new Set((g.tag ?? []).map(t => String(t).replace(/^#/, '').trim()).filter(t => t && t.length <= 40))].slice(0, 12),
     pubblicato: new Date(g.pubblicato).toISOString(),
