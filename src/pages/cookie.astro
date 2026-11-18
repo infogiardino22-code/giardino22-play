@@ -1,0 +1,57 @@
+---
+// Informativa breve su cookie e video di Giardino22 Play.
+// Rimanda alla Privacy Policy e alla Cookie Policy complete del sito principale.
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/catalogo.js';
+const AGGIORNATA = '18 novembre 2026';
+---
+<Base titolo="Cookie e privacy su Play" descrizione="Come Giardino22 Play tratta cookie e video YouTube.">
+  <article class="vpage wrap legale">
+    <div class="eyebrow">Informativa</div>
+    <h1>Cookie e privacy su Play</h1>
+    <p class="legale__agg">Ultimo aggiornamento: {AGGIORNATA}</p>
+
+    <h2>In breve</h2>
+    <p>
+      Giardino22 Play (<strong>play.giardino22.it</strong>) <strong>non usa cookie</strong>: né propri, né di
+      statistica, né di profilazione. Non salva informazioni sul tuo dispositivo e, finché non avvii un video,
+      non si collega a servizi esterni: immagini, caratteri e codice arrivano solo da questo sito.
+      Per questo non ti mostriamo un banner dei cookie.
+    </p>
+
+    <h2>Video di YouTube</h2>
+    <p>
+      I video sono ospitati su YouTube, servizio di Google Ireland Limited. Il player <strong>si carica solo quando
+      premi play</strong>: è il tuo clic ad attivarlo, e vicino al pulsante te lo ricordiamo ogni volta.
+      Usiamo la modalità a privacy avanzata (<code>youtube-nocookie.com</code>), ma una volta avviato il video
+      YouTube può salvare cookie o altri identificatori sul tuo dispositivo e trattare dati come l'indirizzo IP,
+      secondo le proprie regole:
+    </p>
+    <ul>
+      <li><a href="https://policies.google.com/privacy?hl=it" rel="noopener" target="_blank">Privacy Policy di Google</a></li>
+      <li><a href="https://policies.google.com/technologies/cookies?hl=it" rel="noopener" target="_blank">Come Google usa i cookie</a></li>
+    </ul>
+    <p>
+      Se non vuoi, non avviare il video: puoi comunque leggere titoli, descrizioni e informazioni di ogni puntata.
+      Puoi anche guardarlo direttamente sul canale YouTube indicato nella pagina.
+    </p>
+
+    <h2>Link ad altri siti</h2>
+    <p>
+      I pulsanti verso Spotify, YouTube, Instagram e le altre piattaforme ti portano su quei siti, che applicano
+      le loro informative. Prima del clic non trasmettiamo loro alcun dato.
+    </p>
+
+    <h2>Titolare e contatti</h2>
+    <p>
+      Giardino22 Art Lab S.r.l. · Viale Giovanni da Cermenate 82, 20141 Milano · P. IVA 02824270181 ·
+      <a href="mailto:hello@giardino22.it">hello@giardino22.it</a>
+    </p>
+    <p>
+      Informative complete: <a href="https://www.giardino22.it/privacy-policy/">Privacy Policy</a> ·
+      <a href="https://www.giardino22.it/cookie-policy/">Cookie Policy</a> del sito giardino22.it.
+    </p>
+
+    <p><a class="btn btn--main" href={url('')}>Torna a Play</a></p>
+  </article>
+</Base>

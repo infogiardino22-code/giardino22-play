@@ -44,7 +44,7 @@ const info = infoVideo(v, { data: true });
       <div class="player" data-yt={v.id} data-titolo={v.titolo}>
         <img src={media(v.short ? v.img.v : v.img.h)} alt="" width={v.short ? 540 : 960} height={v.short ? 960 : 540} fetchpriority="high" />
         <button class="go" type="button" aria-label={`Riproduci ${v.titolo}`}><Icona nome="play" /></button>
-        <p class="consent">Premendo play il video viene caricato da YouTube.</p>
+        <p class="consent">Premendo play il video viene caricato da YouTube (Google), che può usare cookie. <a href={url('cookie/')}>Informativa</a></p>
       </div>
       <div class="info">
         <a class="eyebrow" href={linkFormat(p.slug)}>{p.nome} · {p.categoria}</a>

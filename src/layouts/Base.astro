@@ -34,7 +34,7 @@ const PLAY_SOCIAL = {
 // Informative legali (sul sito principale). Play non usa cookie propri né di terze parti
 // finché non si preme play su un video (youtube-nocookie.com).
 const PRIVACY = import.meta.env.PRIVACY_URL || process.env.PRIVACY_URL || 'https://www.giardino22.it/privacy-policy/';
-const COOKIE = 'https://www.giardino22.it/cookie-policy/';
+const COOKIE = url('cookie/');
 ---
 <!doctype html>
 <html lang="it">
@@ -125,7 +125,7 @@ const COOKIE = 'https://www.giardino22.it/cookie-policy/';
       <p><a href="mailto:hello@giardino22.it">hello@giardino22.it</a><br /><a href="tel:+390222198530">+39 02 2219 8530</a></p>
     </div>
     <div class="copy">
-      <span>© {new Date().getFullYear()} Giardino22 Art Lab S.r.l. · P. IVA 02824270181 · <a href={PRIVACY}>Privacy Policy</a> · <a href={COOKIE}>Cookie Policy</a></span>
+      <span>© {new Date().getFullYear()} Giardino22 Art Lab S.r.l. · P. IVA 02824270181 · <a href={PRIVACY}>Privacy Policy</a> · <a href={COOKIE}>Cookie</a></span>
       <span>
         <a href="https://www.instagram.com/giardino22artlab/" rel="noopener" target="_blank">Instagram</a> ·
         <a href="https://it.linkedin.com/company/giardino22" rel="noopener" target="_blank">LinkedIn</a> ·
