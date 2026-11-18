@@ -138,6 +138,25 @@ alcune ore, quindi per un'uscita importante conviene premerlo.
 
 ---
 
+## SEO e motori AI
+
+Senza toccare il design, Play è preparato per Google e per le risposte delle AI (ChatGPT, Claude, Perplexity, Gemini, Copilot):
+
+- **Dati strutturati schema.org** in ogni pagina: chi è Giardino22 (ragione sociale, P. IVA, indirizzo, profili social),
+  il sito, i format (con le puntate), ogni video (miniatura, durata, data, lingua, genere, parole chiave dai tag YouTube)
+  e il percorso Play › Format › Puntata. Codice in `src/lib/seo.js`.
+- **Sitemap video** (`/sitemap.xml`): ogni puntata con miniatura, titolo, descrizione, durata, data e player.
+- **`/robots.txt`** apre esplicitamente Play ai crawler AI (GPTBot, ClaudeBot, PerplexityBot, Google-Extended…).
+- **`/llms.txt`** (riassunto e format) e **`/llms-full.txt`** (tutte le puntate con descrizione): testo semplice per i modelli AI.
+- **IndexNow**: a ogni pubblicazione il workflow avvisa Bing (da cui attingono ChatGPT e Copilot) e gli altri motori aderenti.
+  La chiave è il file pubblico `public/d764201c4f2a8657d139c6f31010ab58.txt`.
+- La pagina di ogni video mostra i primi 2000 caratteri della descrizione YouTube; il testo completo (fino a 5000) va nei
+  dati per i motori e in `llms-full.txt`.
+
+Cosa aiuta di più, dal vostro lato: **link alla pagina Play nella descrizione di ogni video YouTube**, **tag** sui video,
+**trascrizioni** delle puntate, e registrare play.giardino22.it su **Google Search Console** e **Bing Webmaster Tools**
+inviando la sitemap.
+
 ## Sicurezza
 
 | Rischio | Come è gestito |
