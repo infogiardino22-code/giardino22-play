@@ -1,22 +1,13 @@
-/* Avviso "SONNO è anche un'app" (19/11/2026). Stesso disegno del sito giardino22.it. */
-.sapp{position:fixed;right:24px;bottom:24px;z-index:9990;width:min(430px,calc(100vw - 32px));border-radius:24px;color:#fff;
-  background:linear-gradient(135deg,#bcd4fb 0%,#9b9cf6 42%,#8e90fa 68%,#93b4ff 100%);
-  box-shadow:0 30px 70px -18px rgba(40,30,150,.65),0 0 0 1px rgba(255,255,255,.35) inset;
-  font-family:"Proxima Nova",Montserrat,system-ui,sans-serif;opacity:0;transform:translateY(30px) scale(.96);transition:opacity .5s,transform .6s cubic-bezier(.22,.8,.24,1)}
-.sapp[hidden]{display:none}
-.sapp.on{opacity:1;transform:none}
-.sapp.on.nudge{animation:sapp-nudge .9s cubic-bezier(.36,.07,.19,.97) 1}
-.sapp a{display:flex;align-items:center;gap:18px;padding:18px 46px 18px 18px;color:#fff;text-decoration:none}
-.sapp img{width:90px;height:120px;object-fit:cover;border-radius:14px;flex:none;transform:rotate(-6deg);box-shadow:0 14px 26px -10px rgba(20,10,90,.6);border:3px solid #0e0e14;background:#0e0e14}
-.sapp span{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0}
-.sapp .sapp-tag{font-weight:900;font-size:11px;line-height:1;letter-spacing:.16em;text-transform:uppercase;background:#EAFF00;color:#1d1a5c;padding:5px 9px;border-radius:99px}
-.sapp strong{font-weight:900;font-size:21px;line-height:1.02;text-transform:uppercase;letter-spacing:-.01em;text-shadow:0 2px 12px rgba(40,30,140,.25)}
-.sapp small{font-weight:700;font-size:13px;line-height:1.25;color:rgba(255,255,255,.92)}
-.sapp .sapp-btn{margin-top:4px;font-weight:900;font-size:13px;line-height:1;letter-spacing:.08em;text-transform:uppercase;background:#EAFF00;color:#1d1a5c;padding:10px 16px;border-radius:99px;animation:sapp-glow 2.6s ease-in-out infinite}
-.sapp a:hover .sapp-btn{background:#fff}
-.sapp-x{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;border:0;background:rgba(255,255,255,.22);color:#fff;font-size:20px;line-height:30px;text-align:center;cursor:pointer;padding:0}
-.sapp-x:hover{background:rgba(255,255,255,.4)}
-@keyframes sapp-nudge{0%,100%{transform:none}20%{transform:translateY(-10px) rotate(-1.5deg)}40%{transform:translateY(0) rotate(1deg)}60%{transform:translateY(-5px)}80%{transform:none}}
-@keyframes sapp-glow{0%,100%{box-shadow:0 0 0 0 rgba(234,255,0,.7)}50%{box-shadow:0 0 0 8px rgba(234,255,0,0)}}
-@media (max-width:560px){.sapp{left:12px;right:12px;bottom:12px;width:auto}.sapp a{gap:14px;padding:14px 42px 14px 14px}.sapp img{width:64px;height:86px}.sapp strong{font-size:17px}}
-@media (prefers-reduced-motion:reduce){.sapp,.sapp .sapp-btn{transition:none;animation:none!important}}
+/* Barra "SONNO è anche un'app gratuita" in cima, dentro l'intestazione fissa (19/11/2026). Stessa barra di giardino22.it. */
+.sbar-w{position:relative;background:linear-gradient(90deg,#a9b4f8 0%,#8e90fa 45%,#8f9ffb 70%,#93b4ff 100%);box-shadow:0 2px 14px rgba(40,30,140,.25)}
+.sbar-w[hidden]{display:none}
+.sbar{display:flex;align-items:center;justify-content:center;gap:14px;min-height:46px;padding:8px 52px;color:#fff;text-decoration:none;font-weight:800;font-size:15px;line-height:1.2;letter-spacing:.01em;text-align:center}
+.sbar-tag{font-weight:900;font-size:11px;line-height:1;letter-spacing:.16em;text-transform:uppercase;background:#EAFF00;color:#1d1a5c;padding:6px 9px;border-radius:99px;flex:none}
+.sbar-btn{font-weight:900;font-size:12px;line-height:1;letter-spacing:.08em;text-transform:uppercase;background:#EAFF00;color:#1d1a5c;padding:8px 14px;border-radius:99px;flex:none;animation:sbar-glow 2.6s ease-in-out infinite}
+.sbar-w .sbar-btn{background:#EAFF00!important;color:#1d1a5c!important}
+.sbar-w .sbar:hover .sbar-btn{background:#fff!important}
+.sbar-x{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:28px;height:28px;border:0;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:18px;line-height:28px;cursor:pointer;padding:0}
+.sbar-x:hover{background:rgba(255,255,255,.4)}
+@keyframes sbar-glow{0%,100%{box-shadow:0 0 0 0 rgba(234,255,0,.7)}50%{box-shadow:0 0 0 7px rgba(234,255,0,0)}}
+@media (max-width:600px){.sbar{gap:10px;padding:8px 44px 8px 12px;font-size:13px;justify-content:flex-start;text-align:left}.sbar .sbar-tag{display:none}}
+@media (prefers-reduced-motion:reduce){.sbar-btn{animation:none}}

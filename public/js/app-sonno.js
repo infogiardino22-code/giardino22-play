@@ -1,24 +1,11 @@
-// Avviso "SONNO è anche un'app" (19/11/2026). Chiuso con la X: non ricompare per 14 giorni.
+// Barra "SONNO è anche un'app gratuita" (19/11/2026). Chiusa con la X: non ricompare per 7 giorni.
 (function () {
-  var el = document.getElementById('sapp'); if (!el) return;
-  var k = 'sapp-chiuso';
-  try { if (Date.now() - (+localStorage.getItem(k) || 0) < 14 * 864e5) return; } catch (e) {}
-  function mostra() {
-    el.hidden = false;
-    setTimeout(function () { el.classList.add('on'); }, 400);
-    setTimeout(function () { el.classList.add('nudge'); }, 1600);
-  }
-  // se c'è la finestra dei cookie aperta, aspetta che venga chiusa
-  // (play.js la apre dopo il caricamento: controllo dopo un attimo)
-  setTimeout(function () {
-    var c = document.getElementById('consenso');
-    if (c && !c.hidden) {
-      var mo = new MutationObserver(function () { if (c.hidden) { mo.disconnect(); mostra(); } });
-      mo.observe(c, { attributes: true, attributeFilter: ['hidden'] });
-    } else mostra();
-  }, 1000);
-  el.querySelector('.sapp-x').addEventListener('click', function () {
-    el.classList.remove('on'); setTimeout(function () { el.hidden = true; }, 500);
+  var el = document.getElementById('sbar'); if (!el) return;
+  var k = 'sbar-chiusa';
+  try { if (Date.now() - (+localStorage.getItem(k) || 0) < 7 * 864e5) return; } catch (e) {}
+  el.hidden = false;
+  el.querySelector('.sbar-x').addEventListener('click', function () {
+    el.hidden = true;
     try { localStorage.setItem(k, String(Date.now())); } catch (e) {}
   });
 })();

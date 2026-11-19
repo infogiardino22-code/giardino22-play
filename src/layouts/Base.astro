@@ -78,6 +78,11 @@ const STATS = (import.meta.env.ANALYTICS_URL || process.env.ANALYTICS_URL || '')
 <body>
   <a class="skip" href="#contenuto">Vai al contenuto</a>
   <header class="top" id="top">
+    <!-- Barra app SONNO (19/11/2026): grafica in css/app-sonno.css, chiusura in js/app-sonno.js -->
+    <div class="sbar-w" id="sbar" hidden>
+      <a class="sbar" href={`${SITO}/sonno/?da=barra-play#app`}><b class="sbar-tag">Novità</b><span>SONNO è anche un'app gratuita</span><b class="sbar-btn">Scaricala →</b></a>
+      <button class="sbar-x" type="button" aria-label="Chiudi">&times;</button>
+    </div>
     <div class="top__in wrap">
       <a class="top__logo" href={BASE} aria-label="Giardino22 Play, home">
         {logoPlay ? <img src={logoPlay} alt="Giardino22 Play" width="75" height="40" /> : <span class="wordmark">Giardino22<b>Play</b></span>}
@@ -154,18 +159,5 @@ const STATS = (import.meta.env.ANALYTICS_URL || process.env.ANALYTICS_URL || '')
     </div>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <!-- Avviso app SONNO (19/11/2026): testo qui, grafica in css/app-sonno.css -->
-  <div class="sapp" id="sapp" hidden>
-    <button class="sapp-x" type="button" aria-label="Chiudi">&times;</button>
-    <a href={`${SITO}/sonno/?da=play#app`}>
-      <img src={url('brand/sonno-app.jpg')} alt="" width="90" height="120" />
-      <span>
-        <b class="sapp-tag">Novità</b>
-        <strong>SONNO è anche un'app</strong>
-        <small>Gratuita su Google Play, presto su iPhone</small>
-        <b class="sapp-btn">Scarica gratis →</b>
-      </span>
-    </a>
-  </div>
 </body>
 </html>
