@@ -5,16 +5,18 @@
   try { if (Date.now() - (+localStorage.getItem(k) || 0) < 14 * 864e5) return; } catch (e) {}
   function mostra() {
     el.hidden = false;
-    setTimeout(function () { el.classList.add('on'); }, 1200);
-    setTimeout(function () { el.classList.add('nudge'); }, 2400);
+    setTimeout(function () { el.classList.add('on'); }, 400);
+    setTimeout(function () { el.classList.add('nudge'); }, 1600);
   }
   // se c'è la finestra dei cookie aperta, aspetta che venga chiusa
-  var c = document.getElementById('consenso');
-  if (c && !c.hidden) {
-    var mo = new MutationObserver(function () { if (c.hidden) { mo.disconnect(); mostra(); } });
-    mo.observe(c, { attributes: true, attributeFilter: ['hidden'] });
-    setTimeout(function () { if (c.hidden) { mo.disconnect(); if (el.hidden) mostra(); } }, 1500);
-  } else mostra();
+  // (play.js la apre dopo il caricamento: controllo dopo un attimo)
+  setTimeout(function () {
+    var c = document.getElementById('consenso');
+    if (c && !c.hidden) {
+      var mo = new MutationObserver(function () { if (c.hidden) { mo.disconnect(); mostra(); } });
+      mo.observe(c, { attributes: true, attributeFilter: ['hidden'] });
+    } else mostra();
+  }, 1000);
   el.querySelector('.sapp-x').addEventListener('click', function () {
     el.classList.remove('on'); setTimeout(function () { el.hidden = true; }, 500);
     try { localStorage.setItem(k, String(Date.now())); } catch (e) {}
